@@ -1,0 +1,17 @@
+
+#向eureka中心注册
+eureka:
+  client:
+    serviceUrl:
+      # 向每个注册中心注册
+      defaultZone: http://localhost:8761/eureka/
+
+#向admin暴露
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+      health:
+        show-details: ALWAYS
