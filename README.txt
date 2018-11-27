@@ -1,7 +1,7 @@
 
-	程序		 	功能			端口设置
-eureca-service		服务注册中心demo		8001/8002
-springboot admin	监控中心demo			8003/8004
-springboot quartz	集群化任务调度中心demo		6001/6002
+	绋嬪簭		 	鍔熻兘			绔彛璁剧疆
+eureca-service		鏈嶅姟娉ㄥ唽涓績demo		       8001/8002
+springboot admin	鐩戞帶涓績demo			8003/8004
+springboot quartz	闆嗙兢鍖栦换鍔¤皟搴︿腑蹇僤emo		    6001/6002
 
 
