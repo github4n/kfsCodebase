@@ -1,0 +1,6 @@
+#DATASOURCE
+spring.datasource: 
+    continueOnError: true
+    url: jdbc:oracle:thin:@(description=(address=(protocol=tcp)(host=127.0.0.1)(port=1521))(connect_data=(service_name=orcl)))
+    username: dmp
+    password: Clic1234
