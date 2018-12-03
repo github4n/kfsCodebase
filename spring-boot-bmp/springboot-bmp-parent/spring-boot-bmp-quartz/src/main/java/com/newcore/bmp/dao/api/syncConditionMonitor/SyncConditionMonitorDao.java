@@ -4,4 +4,5 @@ public interface SyncConditionMonitorDao {
 	
 	public int syncConditionMonitor(String system);
 	
+	public String SelectSystemEnglishName(String system);
 }

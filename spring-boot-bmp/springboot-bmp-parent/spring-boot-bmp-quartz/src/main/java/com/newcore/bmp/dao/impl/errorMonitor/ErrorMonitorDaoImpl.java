@@ -243,7 +243,7 @@ public class ErrorMonitorDaoImpl implements ErrorMonitorDao {
 	
 
 
-	// 批量更新有where_clause的update语句(judge阶段)
+	// 批量更新有where_clause的update语句
 	public void updateBatch_has_where_clause_in_judge_stage(final List<ErrorTrail> resETs) {
 		
 		// 批量执行要更新的纪录

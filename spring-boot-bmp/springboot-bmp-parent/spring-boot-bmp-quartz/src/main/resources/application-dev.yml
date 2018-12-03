@@ -6,11 +6,28 @@ spring.datasource:
     password: Clic1234
  
  
-#测试环境发送邮件时，附件存放的根目录   
+#邮件功能(以下)
+#发件人邮箱
+sendEmailAccount: "kongfanshuo0224@163.com"
+
+#发件人密码
+sendEmailPassword: "kenducky39"
+
+#发件人名称
+sendEmailName: "作业管理平台(测试)"
+
+#发件邮件服务器smtp的ip地址
+myEmailSMTPHost: "smtp.163.com"
+
+ 
+#发送邮件时，附件存放的根目录   
 attachFileLocation: "D:\\"
 
 #测试环境不发邮件
 sendmailFlag: false
+#邮件功能(以上)
 
 #测试环境不进行异常检测和异常消除
 errorMonitorFlag: false
+
+

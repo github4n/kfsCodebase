@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import com.newcore.bmp.service.api.email.EmailService;
+import com.newcore.bmp.service.api.sendDayReport.SendDayReportService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,8 +18,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SendDayReport {
 
+	//@Autowired
+//	EmailService emailService;
+
 	@Autowired
-	EmailService emailService;
+	SendDayReportService sendDayReportService;
+	
 	
 	// 发日报的email
 	public void sendDayReportEmail(String system) {	
@@ -27,7 +32,7 @@ public class SendDayReport {
 		log.info(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + " sendDayReport_start_" + system);
 		
 		 try {
-			emailService.sendDayReportEmail(system);
+			 sendDayReportService.sendDayReportEmail(system);
 		} catch (Exception e) {
 			log.error("Catch Exception in sendDayReport()");
 			e.printStackTrace();
