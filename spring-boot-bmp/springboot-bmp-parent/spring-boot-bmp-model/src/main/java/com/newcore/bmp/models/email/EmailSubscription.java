@@ -13,5 +13,6 @@ public class EmailSubscription {
 	String emailAddress;
 	String emailName;
 	String englishName;
+	String tel;
 
 }

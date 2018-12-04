@@ -14,9 +14,25 @@ public class QueryBatch {
 	
 	String taskIds;
 
+	String whereClause;
+	String startExecTime;
 	
 	
 	
+	
+	
+	public String getWhereClause() {
+		return whereClause;
+	}
+	public void setWhereClause(String whereClause) {
+		this.whereClause = whereClause;
+	}
+	public String getStartExecTime() {
+		return startExecTime;
+	}
+	public void setStartExecTime(String startExecTime) {
+		this.startExecTime = startExecTime;
+	}
 	public String getTaskIds() {
 		return taskIds;
 	}

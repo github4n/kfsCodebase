@@ -22,7 +22,12 @@ public class ErrorMonitor {
 		
 		log.info(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + " errorJudge_start_"+system);
 		
-		 errorMonitorService.errorJudge(system);
+		//异常判断
+		errorMonitorService.errorJudge(system);
+		
+		//针对异常的出单批作业，发送邮件，短信告警
+		errorMonitorService.chudanBatchWarning(system);
+
 		
 		log.info(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + " errorJudge_end_"+system);
 	}

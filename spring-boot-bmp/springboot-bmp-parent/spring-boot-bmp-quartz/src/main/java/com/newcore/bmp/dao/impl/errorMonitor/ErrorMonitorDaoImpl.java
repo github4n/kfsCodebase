@@ -417,6 +417,10 @@ public class ErrorMonitorDaoImpl implements ErrorMonitorDao {
 					parameter_arraylist.add(new String(startExecTime));
 				}
 			}
+			else {
+				//日间批作业在计划运行时间内异常终止，暂时直接消除
+				return 1;
+			}
 			
 			// sql加上异常消除条件
 			sql += "and " + errEliminateCondition;

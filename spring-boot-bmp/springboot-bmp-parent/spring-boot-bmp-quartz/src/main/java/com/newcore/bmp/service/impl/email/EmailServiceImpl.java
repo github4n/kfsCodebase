@@ -20,12 +20,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.google.gson.Gson;
 import com.newcore.bmp.dao.api.email.EmailDao;
 import com.newcore.bmp.models.email.Email;
 import com.newcore.bmp.models.email.EmailSubscription;
+import com.newcore.bmp.models.email.notificationPlatform.NotificationPlatform;
+import com.newcore.bmp.service.api.Http.HttpService;
 import com.newcore.bmp.service.api.email.EmailService;
 
+import lombok.val;
+import lombok.extern.slf4j.Slf4j;
+
 @Service("emailService")
+@Slf4j
 public class EmailServiceImpl implements EmailService {
 	@Autowired
 	EmailDao emailDao;
@@ -33,10 +40,19 @@ public class EmailServiceImpl implements EmailService {
 	@Autowired
 	Email email;
 	
+	@Autowired
+	NotificationPlatform notificationPlatform;
+	
+	@Autowired
+	HttpService httpService;
 	
 	//是否实际发送邮件
 	@Value("${sendmailFlag:true}")
 	boolean sendmailFlag;
+	
+	//通知中心的url
+	@Value("${notificationPlatformUrl}")
+	String notificationPlatformUrl;
 	
 	//发送邮件
 	@Override
@@ -151,5 +167,41 @@ public class EmailServiceImpl implements EmailService {
 		//只给管理员发
 		public List<EmailSubscription> SelectEmailSubscriptionOfAdministrator(String system) {
 				return emailDao.SelectEmailSubscriptionOfAdministrator(system);
+		}
+		
+		//通过通知中心发送邮件
+		public void sendEmailThroughNotificationPlatform(String title, String text, String phone, String email, String copyMail, String blindMail,String cloudId, String opDate) {
+			
+			if(!sendmailFlag) {
+				return;
+			}
+			
+			//给报文的mojo赋值
+			this.setInfo(title, text, phone, email, copyMail, blindMail, cloudId, opDate);			
+			log.info(notificationPlatform.toString());			
+			String params = new Gson().toJson(notificationPlatform);
+			log.info("params  = " + params);
+			
+			//给通知中心发报文
+			HttpService.doPost(notificationPlatformUrl, params);
+						
+		}
+
+		//给报文的mojo赋值
+		private void setInfo(String title, String text, String phone, String email, String copyMail, String blindMail,
+				String cloudId, String opDate) {
+			notificationPlatform.getBody().setTitle(title);
+			notificationPlatform.getBody().setTitle(text);
+			notificationPlatform.getBody().getSms().setPhone(phone);
+			notificationPlatform.getBody().getMail().setEmail(email);
+			notificationPlatform.getBody().getMail().setCopyMail(copyMail);
+			notificationPlatform.getBody().getMail().setBlindMail(blindMail);
+			notificationPlatform.getBody().getCloud().setCloudId(cloudId);
+			notificationPlatform.getBody().setOpDate(opDate);
+		}
+		
+		//只给管理员发
+		public List<EmailSubscription> SelectEmailSubscriptionOfChudan(String system) {
+				return emailDao.SelectEmailSubscriptionOfChudan(system);
 		}
 }

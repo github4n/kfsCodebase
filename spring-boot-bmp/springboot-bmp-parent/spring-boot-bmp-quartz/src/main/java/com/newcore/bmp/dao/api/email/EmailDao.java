@@ -14,4 +14,6 @@ public interface EmailDao {
 	
 	public List<EmailSubscription> SelectEmailSubscriptionOfAdministrator(String system);
 
+	public List<EmailSubscription> SelectEmailSubscriptionOfChudan(String system);
+
 }

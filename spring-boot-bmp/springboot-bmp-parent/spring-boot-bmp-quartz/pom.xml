@@ -22,7 +22,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
-		
+
 	</properties>
 
 	<dependencies>
@@ -92,7 +92,7 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
 		</dependency>
-  
+
 		<dependency>
 			<groupId>de.codecentric</groupId>
 			<artifactId>spring-boot-admin-starter-client</artifactId>
@@ -107,50 +107,66 @@
 
 		<!-- 制作excel文件 -->
 		<dependency>
-    	<groupId>org.apache.poi</groupId>
-    	<artifactId>poi</artifactId>
-    	<version>${poi.version}</version>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>${poi.version}</version>
 		</dependency>
-		
+
 		<!-- halo依赖 -->
-    <!--halo-core -->
-        <dependency>
-            <groupId>com.halo</groupId>
-            <artifactId>clic-suite</artifactId>
-            <version>${halo_version}</version>
-            <type>pom</type>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.halo</groupId>
-                    <artifactId>clic-dasc</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.halo</groupId>
-                    <artifactId>clic-kafka</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.halo</groupId>
-                    <artifactId>clic-web</artifactId>
-                </exclusion>
+		<!--halo-core -->
+		<dependency>
+			<groupId>com.halo</groupId>
+			<artifactId>clic-suite</artifactId>
+			<version>${halo_version}</version>
+			<type>pom</type>
+			<exclusions>
+				<exclusion>
+					<groupId>com.halo</groupId>
+					<artifactId>clic-dasc</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.halo</groupId>
+					<artifactId>clic-kafka</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.halo</groupId>
+					<artifactId>clic-web</artifactId>
+				</exclusion>
 
-                <exclusion>
-                    <groupId>com.halo</groupId>
-                    <artifactId>clic-queue</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+				<exclusion>
+					<groupId>com.halo</groupId>
+					<artifactId>clic-queue</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 
-        <!--core-supports-->
-        <dependency>
-            <groupId>com.newcore.core.supports</groupId>
-            <artifactId>header-support</artifactId>
-            <version>${header-support_version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.newcore.core.supports</groupId>
-            <artifactId>datagrid-support</artifactId>
-            <version>${datagrid-support_version}</version>
-        </dependency>
+		<!--core-supports -->
+		<dependency>
+			<groupId>com.newcore.core.supports</groupId>
+			<artifactId>header-support</artifactId>
+			<version>${header-support_version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.newcore.core.supports</groupId>
+			<artifactId>datagrid-support</artifactId>
+			<version>${datagrid-support_version}</version>
+		</dependency>
+
+		<!-- httpclient -->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpcore</artifactId>
+		</dependency>
+
+		<!-- gson -->
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+		</dependency>
 
 	</dependencies>
 

@@ -12,4 +12,8 @@ public interface EmailService {
 	public List<EmailSubscription> SelectEmailSubscriptionOfSystem(String system);
 	
 	public List<EmailSubscription> SelectEmailSubscriptionOfAdministrator(String system);
+	
+	public void sendEmailThroughNotificationPlatform(String title, String text, String phone, String email, String copyMail, String blindMail,String cloudId, String opDate);
+
+	List<EmailSubscription> SelectEmailSubscriptionOfChudan(String system);
 }

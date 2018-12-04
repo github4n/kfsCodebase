@@ -1,5 +1,6 @@
 C:\development_environment\repository\myself\spring-boot-bmp\springboot-bmp-parent\spring-boot-bmp-model\src\main\java\com\newcore\bmp\models\errorJudge\SelectField.java
 C:\development_environment\repository\myself\spring-boot-bmp\springboot-bmp-parent\spring-boot-bmp-model\src\main\java\com\newcore\bmp\models\webvo\JsonFirstLayer.java
+C:\development_environment\repository\myself\spring-boot-bmp\springboot-bmp-parent\spring-boot-bmp-model\src\main\java\com\newcore\bmp\models\email\notificationPlatform\Body.java
 C:\development_environment\repository\myself\spring-boot-bmp\springboot-bmp-parent\spring-boot-bmp-model\src\main\java\com\newcore\bmp\models\webvo\RunningBatchVo.java
 C:\development_environment\repository\myself\spring-boot-bmp\springboot-bmp-parent\spring-boot-bmp-model\src\main\java\com\newcore\bmp\models\webvo\SystemCommandDef.java
 C:\development_environment\repository\myself\spring-boot-bmp\springboot-bmp-parent\spring-boot-bmp-model\src\main\java\com\newcore\bmp\models\webvo\QueryCond.java
@@ -23,14 +24,20 @@ C:\development_environment\repository\myself\spring-boot-bmp\springboot-bmp-pare
 C:\development_environment\repository\myself\spring-boot-bmp\springboot-bmp-parent\spring-boot-bmp-model\src\main\java\com\newcore\bmp\models\webvo\ZongKongBatch.java
 C:\development_environment\repository\myself\spring-boot-bmp\springboot-bmp-parent\spring-boot-bmp-model\src\main\java\com\newcore\bmp\models\authority\models\Clerk.java
 C:\development_environment\repository\myself\spring-boot-bmp\springboot-bmp-parent\spring-boot-bmp-model\src\main\java\com\newcore\bmp\models\authority\models\ClerkResource.java
+C:\development_environment\repository\myself\spring-boot-bmp\springboot-bmp-parent\spring-boot-bmp-model\src\main\java\com\newcore\bmp\models\email\notificationPlatform\SMS.java
 C:\development_environment\repository\myself\spring-boot-bmp\springboot-bmp-parent\spring-boot-bmp-model\src\main\java\com\newcore\bmp\models\webvo\DepartmentVo.java
 C:\development_environment\repository\myself\spring-boot-bmp\springboot-bmp-parent\spring-boot-bmp-model\src\main\java\com\newcore\bmp\models\authority\param\BranchRoleParam.java
+C:\development_environment\repository\myself\spring-boot-bmp\springboot-bmp-parent\spring-boot-bmp-model\src\main\java\com\newcore\bmp\models\email\notificationPlatform\Header.java
 C:\development_environment\repository\myself\spring-boot-bmp\springboot-bmp-parent\spring-boot-bmp-model\src\main\java\com\newcore\bmp\models\webvo\JsonResponce.java
 C:\development_environment\repository\myself\spring-boot-bmp\springboot-bmp-parent\spring-boot-bmp-model\src\main\java\com\newcore\bmp\models\webvo\QueryBatch.java
+C:\development_environment\repository\myself\spring-boot-bmp\springboot-bmp-parent\spring-boot-bmp-model\src\main\java\com\newcore\bmp\models\email\notificationPlatform\Mail.java
 C:\development_environment\repository\myself\spring-boot-bmp\springboot-bmp-parent\spring-boot-bmp-model\src\main\java\com\newcore\bmp\models\authority\models\TreeModel.java
 C:\development_environment\repository\myself\spring-boot-bmp\springboot-bmp-parent\spring-boot-bmp-model\src\main\java\com\newcore\bmp\models\bo\BranchBo.java
 C:\development_environment\repository\myself\spring-boot-bmp\springboot-bmp-parent\spring-boot-bmp-model\src\main\java\com\newcore\bmp\models\authority\models\SessionModel.java
 C:\development_environment\repository\myself\spring-boot-bmp\springboot-bmp-parent\spring-boot-bmp-model\src\main\java\com\newcore\bmp\models\email\Email.java
+C:\development_environment\repository\myself\spring-boot-bmp\springboot-bmp-parent\spring-boot-bmp-model\src\main\java\com\newcore\bmp\models\email\notificationPlatform\Cloud.java
 C:\development_environment\repository\myself\spring-boot-bmp\springboot-bmp-parent\spring-boot-bmp-model\src\main\java\com\newcore\bmp\models\errorJudge\ErrorDefine.java
+C:\development_environment\repository\myself\spring-boot-bmp\springboot-bmp-parent\spring-boot-bmp-model\src\main\java\com\newcore\bmp\models\email\notificationPlatform\NotificationPlatform.java
 C:\development_environment\repository\myself\spring-boot-bmp\springboot-bmp-parent\spring-boot-bmp-model\src\main\java\com\newcore\bmp\models\bo\DepartmentBo.java
+C:\development_environment\repository\myself\spring-boot-bmp\springboot-bmp-parent\spring-boot-bmp-model\src\main\java\com\newcore\bmp\models\email\notificationPlatform\User.java
 C:\development_environment\repository\myself\spring-boot-bmp\springboot-bmp-parent\spring-boot-bmp-model\src\main\java\com\newcore\bmp\models\errorJudge\ErrorTrail.java

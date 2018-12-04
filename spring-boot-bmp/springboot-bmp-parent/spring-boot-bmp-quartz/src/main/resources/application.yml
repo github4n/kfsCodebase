@@ -56,3 +56,9 @@ management:
 #定时任务kafka延迟时间设置(单位：秒)
 kafka_delay_time: 600
 
+#通知中心配置
+token: "1530668590645"
+userChannel: "103"
+msgType: "2"
+userid: "18200339"
+notificationPlatformUrl: "http://10.21.8.7:8081"

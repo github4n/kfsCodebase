@@ -48,4 +48,21 @@ public class EmailDaoImpl implements EmailDao {
 						
 		return (List<EmailSubscription>) jdbcTemplate.query(sql, DaoUtils.createRowMapper(EmailSubscription.class), system, administrator);
 	}
+	
+	//出单批作业的收件人
+	public List<EmailSubscription> SelectEmailSubscriptionOfChudan(String system) {
+		// 构造sql
+		String sql =   "select "+   
+				 "es.SYSTEM as system, "+   
+				 "es.TYPE as type, "+   
+				 "es.EMAIL_ADDRESS as emailAddress, "+   
+				 "es.EMAIL_NAME as emailName, "+
+				 "es.TEL as tel "+
+				 "from EMAIL_SUBSCRIPTION es ";
+				
+		// sql加上对SYSTEM的限定条件
+		sql += "where es.SYSTEM = ? and es.CHUDAN_FLAG = 1";
+						
+		return (List<EmailSubscription>) jdbcTemplate.query(sql, DaoUtils.createRowMapper(EmailSubscription.class), system);
+	}
 }
