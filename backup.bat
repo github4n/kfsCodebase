@@ -9,7 +9,7 @@ cd C:\development_environment\repository\myself
 
 ::上传到git
 git add .
-git commit -m "最新修改时间：%upload_time%"
+git commit -m "newest modify time：%upload_time%"
 git pull 
 git push 
 git status
