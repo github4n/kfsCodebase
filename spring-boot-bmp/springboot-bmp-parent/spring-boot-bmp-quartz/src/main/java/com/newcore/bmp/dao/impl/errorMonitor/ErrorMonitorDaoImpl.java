@@ -16,11 +16,15 @@ import org.springframework.stereotype.Repository;
 import com.halo.core.dao.util.DaoUtils;
 import com.newcore.bmp.dao.api.errorMonitor.ErrorMonitorDao;
 import com.newcore.bmp.models.webvo.RunningBatchVo;
+
+import lombok.extern.slf4j.Slf4j;
+
 import com.newcore.bmp.models.errorJudge.ErrorDefine;
 import com.newcore.bmp.models.errorJudge.ErrorTrail;
 import com.newcore.bmp.models.errorJudge.SelectField;
 
 @Repository("errorMonitorDao")
+@Slf4j
 public class ErrorMonitorDaoImpl implements ErrorMonitorDao {
 
 	@Autowired
@@ -557,6 +561,60 @@ public class ErrorMonitorDaoImpl implements ErrorMonitorDao {
 			}
 		});
 	}
+
+	@Override
+	public List<ErrorDefine> selectChudanErrorReasonId(String system) {
+				
+		String sql ="select "
+				+ "ERR_REASON_ID as errReasonId, "
+				+ "ERR_REASON_DETAIL as errReasonDetail, "
+				+ "ERR_SCALE as errScale, "
+				+ "ERR_JUDGE_CONDITION as errJudgeCondition, "
+				+ "ERR_ELIMINATE_CONDITION as errEliminateCondition, "
+				+ "SYSTEM as system, "
+				+ "MONITOR_INTERVAL_COUNT as monitorIntervalCount "
+				+ "from ERROR_DEFINE "
+				+ "where SYSTEM = ? "
+				+ "and ERR_SCALE = '严重' ";
+		
+		return (List<ErrorDefine>)  jdbcTemplate.query(sql, DaoUtils.createRowMapper(ErrorDefine.class), system);
+	}
+
+	@Override
+	public List<ErrorTrail> selectChudanErrorRecord(String system, String errReasonId, String monitorIntervalCount) {
+		String sql = "select " 
+				+ "et.ID as id, " 
+				+ "et.TASK_ID as taskId, " 
+				+ "et.BATCH_TX_NO as batchTxNo, "
+				+ "et.PROV_BRANCH_CODE as provBranchCode, " 
+				+ "et.WHERE_CLAUSE as whereClause, "
+				+ "et.ERR_REASON_ID as errReasonId, " 
+				+ "et.ERR_JUDGE_COUNT as errJudgeCount, "
+				+ "et.ERR_ELIMITATE_FLAG as errElimitateFlag, " 
+				+ "et.ERR_FIRST_JUDGE_TIME as errFirstJudgeTime, "
+				+ "et.ERR_RECENT_JUDGE_TIME as errRecentJudgeTime, " 
+				+ "et.ERR_ELIMITATE_TIME as errElimitateTime, "
+				+ "to_char(et.START_EXEC_TIME, 'yyyy-mm-dd hh24:mi:ss') as startExecTime, " + "et.SYSTEM as system,"
+				+ "bd.BATCH_NAME as batchName,"
+				+ "bp.PROV_BRANCH_NAME as provBranchName, "
+				+ "ed.ERR_REASON_DETAIL as errReasonDetail " +
+
+				"from ERROR_TRAIL et "
+				+ "join BATCH_DEF bd "
+				+ "on et.BATCH_TX_NO = bd.BATCH_ID "
+				+ "and et.SYSTEM = bd.SYSTEM "
+				+ "join BMP_PROVINCE bp "
+				+ "on et.PROV_BRANCH_CODE = bp.PROV_BRANCH_CODE "
+				+ "join ERROR_DEFINE ed "
+				+ "on et.ERR_REASON_ID = ed.ERR_REASON_ID "
+				+ "where bd.CHUDAN_FLAG = 1 "
+				+ "and bd.SYSTEM = ? "
+				+ "and et.ERR_REASON_ID = ? "
+				+ "and mod(ERR_JUDGE_COUNT, ?) = 0 ";
+
+				return (List<ErrorTrail>) jdbcTemplate.query(sql, DaoUtils.createRowMapper(ErrorTrail.class), system, errReasonId, monitorIntervalCount);
+	}
 	
 
+	
 }

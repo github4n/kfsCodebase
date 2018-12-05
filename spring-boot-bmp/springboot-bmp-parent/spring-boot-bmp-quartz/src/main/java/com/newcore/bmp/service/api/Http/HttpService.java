@@ -45,7 +45,7 @@ public class HttpService {
 			StatusLine status = response.getStatusLine();
 			int state = status.getStatusCode();
 			
-			log.info("请求返回码" + state);
+			log.info("请求返回码:" + state);
 
 			if (state == HttpStatus.SC_OK) {
 				HttpEntity responseEntity = response.getEntity();

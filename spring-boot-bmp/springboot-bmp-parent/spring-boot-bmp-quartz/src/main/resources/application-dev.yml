@@ -24,7 +24,7 @@ myEmailSMTPHost: "smtp.163.com"
 attachFileLocation: "D:\\"
 
 #测试环境不发邮件
-sendmailFlag: false
+sendmailFlag: true
 #邮件功能(以上)
 
 #测试环境不进行异常检测和异常消除

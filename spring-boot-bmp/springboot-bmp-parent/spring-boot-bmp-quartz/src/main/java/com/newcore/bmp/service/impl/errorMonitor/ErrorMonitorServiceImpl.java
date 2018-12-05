@@ -61,7 +61,7 @@ public class ErrorMonitorServiceImpl implements ErrorMonitorService {
 			for (int j = 0; j < sizeSF; j++) {
 
 				SelectField recordSF = resSF.get(j);
-				log.info("errorJudging第"+i+"个异常记录="+recordSF);
+				log.info("第"+i+"个异常规则的"+"第"+j+"个异常记录="+recordSF);
 				
 
 				// 根据（机构号，批作业编号，执行条件，异常编号），到ERROR_TRAIL表中查相应记录
@@ -97,9 +97,31 @@ public class ErrorMonitorServiceImpl implements ErrorMonitorService {
 
 	//针对异常的出单批作业，发送邮件，短信告警
 	public void chudanBatchWarning(String system) {
+///*				
+		//取出轨迹表中的数据
+		List<ErrorDefine> edList = errorMonitorDao.selectChudanErrorReasonId(system);
+		log.info("edList.size()= " + edList.size());
 		
+
+		//Iterator<ErrorDefine> edIt = edList.iterator();
+		//while(edIt.hasNext()) {
+		for (int i = 0; i < edList.size(); i++) {
+			//ErrorDefine ed = (ErrorDefine) edIt.next();
+			ErrorDefine ed = edList.get(i);
+
+			List<ErrorTrail> etList = errorMonitorDao.selectChudanErrorRecord(system, ed.getErrReasonId(), ed.getMonitorIntervalCount());
+			log.info("etList.size()="+etList.size());
+			
+			Iterator<ErrorTrail> etIt =etList.iterator();
+			while(etIt.hasNext()) {
+				ErrorTrail et = etIt.next();
+				
+				this.prepareAndSendChudanWarningMailThroughNP(system, et);
+			}
+		}
+//*/
 		
-		
+/*		
 		String title = "作业管理平台告警";
 		//String text = "这是测试内容";
 		
@@ -110,10 +132,15 @@ public class ErrorMonitorServiceImpl implements ErrorMonitorService {
 		String batchName ="批作业名称";
 		String lineBatchName = "批作业名称: " + batchName;
 		
+		String provName ="北京";
+		String provCode ="110000";
+		String lineProvName = "省份: " + provName + "("+ provCode +")";
+		
 		String error ="批作业计划内时间未启动";
 		String lineError = "异常: " + error;
 		
-		String interval ="2018-12-04 10:04:00 ~ 2018-12-04 10:19:00";
+		String interval ="2018-12-04 10:04:00 ~ 2018-12-05 00:00:00" + DateUtil.now();
+;
 		String lineInterval = "检测区间: " + interval;
 		
 		//拼接text
@@ -121,9 +148,11 @@ public class ErrorMonitorServiceImpl implements ErrorMonitorService {
 		String lineSeparator = "\n";
 		text_sb.append(lineBatchId).append(lineSeparator)
 		.append(lineBatchName).append(lineSeparator)
+		.append(lineProvName).append(lineSeparator)
 		.append(lineError).append(lineSeparator)
 		.append(lineInterval).append(lineSeparator);		
 		String text = text_sb.toString();
+		//log.info(text);
 			
 		//获取收件人
 		StringBuffer phone_sb = new StringBuffer();
@@ -134,7 +163,7 @@ public class ErrorMonitorServiceImpl implements ErrorMonitorService {
 		Iterator<EmailSubscription> iterator = listEmailSubscription.iterator();
 		while(iterator.hasNext()) {
 			EmailSubscription es = iterator.next();
-			log.info(es.toString());
+			//log.info(es.toString());
 			
 			//拼接电话号
 			phone_sb.append(es.getTel()).append(separator);
@@ -159,11 +188,11 @@ public class ErrorMonitorServiceImpl implements ErrorMonitorService {
 
 		//拼接收件人
 		//String email = "kongfanshuo0224@163.com, 594503287@qq.com";
-		String email = email_sb.deleteCharAt(phone_sb.length()-1).toString();
+		String email = email_sb.deleteCharAt(email_sb.length()-1).toString();
 		
 		//拼接抄送人
 		//String copyMail = "kongfanshuo@e-chinalife.com";
-		String copyMail = copyMail_sb.deleteCharAt(phone_sb.length()-1).toString();
+		String copyMail = copyMail_sb.deleteCharAt(copyMail_sb.length()-1).toString();
 
 		//拼接密送人
 		String blindMail = "";
@@ -175,12 +204,96 @@ public class ErrorMonitorServiceImpl implements ErrorMonitorService {
 		String opDate = DateUtil.now();
 		
 		emailService.sendEmailThroughNotificationPlatform(title, text, phone, email, copyMail, blindMail, cloudId, opDate);
+*/
+	}
+
+	private void prepareAndSendChudanWarningMailThroughNP(String system, ErrorTrail et) {
+		
+		//准备要发送的邮件，短信内容
+		String title = "作业管理平台告警";
+		
+		//获取text内容
+		String batchId =et.getBatchTxNo();
+		String lineBatchId = "批作业ID: " + batchId;
+		
+		String batchName =et.getBatchName();
+		String lineBatchName = "批作业名称: " + batchName;
+		
+		String provName = et.getProvBranchName();
+		String provCode = et.getProvBranchCode();
+		String lineProvName = "省份: " + provName + "("+ provCode +")";
+		
+		String error = et.getErrReasonDetail();
+		String lineError = "异常: " + error;
+		
+		String interval = et.getStartExecTime() + " ~ " + DateUtil.now();
+		String lineInterval = "检测区间: " + interval;
+		
+		//拼接text
+		StringBuffer text_sb  = new StringBuffer();
+		String lineSeparator = "\n";
+		text_sb.append(lineBatchId).append(lineSeparator)
+		.append(lineBatchName).append(lineSeparator)
+		.append(lineProvName).append(lineSeparator)
+		.append(lineError).append(lineSeparator)
+		.append(lineInterval).append(lineSeparator);		
+		String text = text_sb.toString();
+		//log.info(text);
+			
+		//获取收件人
+		StringBuffer phone_sb = new StringBuffer();
+		StringBuffer email_sb = new StringBuffer();
+		StringBuffer copyMail_sb = new StringBuffer();
+		String separator = ",";
+		List<EmailSubscription> listEmailSubscription = emailService.SelectEmailSubscriptionOfChudan(system);
+		Iterator<EmailSubscription> iterator = listEmailSubscription.iterator();
+		while(iterator.hasNext()) {
+			EmailSubscription es = iterator.next();
+			//log.info(es.toString());
+			
+			//拼接电话号
+			phone_sb.append(es.getTel()).append(separator);
+			
+			if (es.getType().equals("TO")) {
+				//拼接收件人
+				email_sb.append(es.getEmailAddress()).append(separator);
+
+			} 
+			else if (es.getType().equals("CC")) {
+				//拼接抄送人
+				copyMail_sb.append(es.getEmailAddress()).append(separator);
+			} 
+			else {
+				//do nothing
+			}						
+		}
+		
+		//拼接电话号
+		//String phone = "13161582855,17611090268";		
+		String phone = phone_sb.deleteCharAt(phone_sb.length()-1).toString();
+		//拼接收件人
+		//String email = "kongfanshuo0224@163.com, 594503287@qq.com";
+		String email = email_sb.deleteCharAt(email_sb.length()-1).toString();
+		
+		//拼接抄送人
+		//String copyMail = "kongfanshuo@e-chinalife.com";
+		String copyMail = copyMail_sb.deleteCharAt(copyMail_sb.length()-1).toString();
+
+		//拼接密送人
+		String blindMail = "";
+		
+		//拼接云助理Id
+		String cloudId = ""; 
+		
+		//拼接时间区间
+		String opDate = DateUtil.now();
+		
+		//通过通知中心发送邮件
+		emailService.sendEmailThroughNotificationPlatform(title, text, phone, email, copyMail, blindMail, cloudId, opDate);
 	}
 	
-	private void SelectEmailSubscriptionOfChudan(String system) {
-		// TODO Auto-generated method stub
-		
-	}
+	
+	
 
 	// 异常消除
 	public void errorEliminate(String system) {

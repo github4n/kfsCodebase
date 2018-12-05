@@ -10,6 +10,17 @@ public class ErrorDefine {
 	String errJudgeCondition; // 异常判定条件
 	String errEliminateCondition; // 异常消除条件
 	String system; // 所属系统
+	String monitorIntervalCount;
+	
+	
+
+	public String getMonitorIntervalCount() {
+		return monitorIntervalCount;
+	}
+
+	public void setMonitorIntervalCount(String monitorIntervalCount) {
+		this.monitorIntervalCount = monitorIntervalCount;
+	}
 
 	public String getErrReasonId() {
 		return errReasonId;

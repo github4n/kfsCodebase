@@ -180,7 +180,7 @@ public class EmailServiceImpl implements EmailService {
 			this.setInfo(title, text, phone, email, copyMail, blindMail, cloudId, opDate);			
 			log.info(notificationPlatform.toString());			
 			String params = new Gson().toJson(notificationPlatform);
-			log.info("params  = " + params);
+			//log.info("params  = " + params);
 			
 			//给通知中心发报文
 			HttpService.doPost(notificationPlatformUrl, params);
@@ -191,7 +191,7 @@ public class EmailServiceImpl implements EmailService {
 		private void setInfo(String title, String text, String phone, String email, String copyMail, String blindMail,
 				String cloudId, String opDate) {
 			notificationPlatform.getBody().setTitle(title);
-			notificationPlatform.getBody().setTitle(text);
+			notificationPlatform.getBody().setText(text);
 			notificationPlatform.getBody().getSms().setPhone(phone);
 			notificationPlatform.getBody().getMail().setEmail(email);
 			notificationPlatform.getBody().getMail().setCopyMail(copyMail);

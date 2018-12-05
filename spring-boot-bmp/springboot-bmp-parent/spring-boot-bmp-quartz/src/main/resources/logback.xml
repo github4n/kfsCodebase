@@ -100,22 +100,9 @@
 			<pattern>${contentPattern}</pattern>
 		</encoder>
 	</appender>
+	
+ 
 
-	<!--////////////////////////接口日志//////////////////////// -->
-	<logger name="org.apache.cxf" level="ERROR" />
-
-	<!--////////////////////////数据库日志//////////////////////// -->
-	<logger name="druid.sql" level="ERROR" />
-	<logger name="com.newcore.bmp.dao" level="INFO" />
-
-	<!--////////////////////////服务日志//////////////////////// -->
-	<logger name="com.newcore.bmp.service" level="INFO" />
-
-	<!--////////////////////////框架日志//////////////////////// -->
-	<logger name="com.halo.core" level="ERROR" />
-
-	<!--////////////////////////WEB日志//////////////////////// -->
-	<logger name="com.newcore.bmp.web" level="INFO" />
 
 	<!--////////////////////////全量日志//////////////////////// -->
 	<root level="INFO">
@@ -124,8 +111,10 @@
 		<!-- <appender-ref ref="CORE_FILE_OUT_ASYNC" /> -->
 	</root>
 
-	<logger name="top.ywwxhz.job" level="DEBUG" additivity="false">
+ <!--  job下的日志输出到core文件
+	<logger name="top.ywwxhz.job" level="INFO" additivity="true">
 		<appender-ref ref="CORE_FILE_OUT_ASYNC" />
 	</logger>
-	
+-->
+ 	
 </configuration>

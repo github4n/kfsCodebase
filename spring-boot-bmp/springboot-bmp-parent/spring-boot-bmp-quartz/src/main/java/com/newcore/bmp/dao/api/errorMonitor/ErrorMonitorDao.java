@@ -43,4 +43,8 @@ public interface ErrorMonitorDao {
 
 	public int FindInMonitorQueue(String system, String provBranchCode, String batchTxNo, String whereClause,
 			String errEliminateCondition, String errReasonId, String startExecTime, String errReasonDetail);
+
+	public List<ErrorDefine> selectChudanErrorReasonId(String system);
+
+	public List<ErrorTrail> selectChudanErrorRecord(String system, String errReasonId, String monitorIntervalCount);
 }

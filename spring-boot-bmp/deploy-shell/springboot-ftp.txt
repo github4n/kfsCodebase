@@ -1,0 +1,19 @@
+open 10.21.33.30
+bstdup
+Upbstd4321
+prompt off
+cd /services/bstd/BMP/version/all
+
+lcd C:\development_environment\repository\myself\spring-boot-bmp\springboot-bmp-parent\spring-boot-bmp-quartz\target
+mput spring-boot-bmp-quartz-1.0.0-SNAPSHOT.jar
+
+lcd C:\development_environment\repository\myself\spring-boot-bmp\springboot-bmp-parent\spring-cloud-eureca-server\target
+mput spring-cloud-eureca-server-1.0.0-SNAPSHOT.jar
+
+lcd C:\development_environment\repository\myself\spring-boot-bmp\springboot-bmp-parent\spring-boot-admin\target
+mput spring-boot-admin-1.0.0-SNAPSHOT.jar
+
+close
+prompt on
+bye
+quit
