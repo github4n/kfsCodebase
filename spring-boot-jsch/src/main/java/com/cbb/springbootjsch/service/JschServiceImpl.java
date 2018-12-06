@@ -51,7 +51,8 @@ public class JschServiceImpl {
 	private int jschTimeOut;
 	
 	//临时存放远程文件的地方
-	private String localFilePath = "/tmp/";
+	@Value("${host.tmp.directory}")
+	private String localFilePath;
 
 	// 连接到指定的服务器
 	public boolean connect() {
@@ -62,7 +63,7 @@ public class JschServiceImpl {
 
 		try {
 
-			long begin = System.currentTimeMillis();// 连接前时间
+			long begin = System.currentTimeMillis();
 			log.debug("Try to connect to jschHost = " + jschHost + ",as jschUserName = " + jschUserName
 					+ ",as jschPort =  " + jschPort);
 
@@ -77,7 +78,7 @@ public class JschServiceImpl {
 			log.debug("Connected successfully to jschHost = " + jschHost + ",as jschUserName = " + jschUserName
 					+ ",as jschPort =  " + jschPort);
 
-			long end = System.currentTimeMillis();// 连接后时间
+			long end = System.currentTimeMillis();
 
 			log.debug("Connected To SA Successful in {} ms", (end - begin));
 
@@ -114,12 +115,6 @@ public class JschServiceImpl {
 
 	}
 
-	/*
-	 * // 下载文件 public void download() {
-	 * 
-	 * return; }
-	 */
-
 	/**
 	 * 下载文件
 	 * 
@@ -136,7 +131,7 @@ public class JschServiceImpl {
 			chSftp = (ChannelSftp) channel;
 			SftpATTRS attr = chSftp.stat(downloadFile);
 			long fileSize = attr.getSize();
-			log.info("downloadFile size = " + fileSize + "bytes");
+			log.info("要下载的文件大小 = " + fileSize + "bytes");
 
 			OutputStream out = new FileOutputStream(localStoredFile);
 
@@ -171,7 +166,7 @@ public class JschServiceImpl {
 	}
 
 	/**
-	 * 下载远程的文件
+	 * 下载远程的文件到本地
 	 * 
 	 * @param localStoredFile 下载到的本地文件地址,如/tmp/xxx.txt
 	 * @param downloadFile    要下载的远端文件地址,如/opt/xxx.txt
@@ -182,7 +177,7 @@ public class JschServiceImpl {
 		boolean isConnected = false;
 		isConnected = this.connect();
 
-		log.info("下载文件前，连接状态=" + isConnected);
+		log.info("与远程服务器的连接状态=" + isConnected);
 
 		if (isConnected == true) {
 
@@ -193,20 +188,10 @@ public class JschServiceImpl {
 		}
 	}
 
-	public String downloadFileToExplore( String downloadFile, HttpServletResponse response) {
-		
-		//下载远程的文件到本地
-		this.downloadToLocalFile(localStoredFile, downloadFile);
-		
-		localFilePath
-		
-		String filePath = "D:\\car.txt";
-		String fileName = "car2.txt";
 
-		return transferLocalFileToExplorer(response, filePath, fileName);
-	}
 
-	private String transferLocalFileToExplorer(HttpServletResponse response, String filePath, String fileName) {
+	//把本地文件传回前台
+	public void transferLocalFileToExplorer(HttpServletResponse response, String filePath, String fileName) {
 		File file = new File(filePath);
 		if (file.exists()) {
 			response.setContentType("application/force-download");// 设置强制下载不打开
@@ -223,7 +208,7 @@ public class JschServiceImpl {
 					os.write(buffer, 0, i);
 					i = bis.read(buffer);
 				}
-				System.out.println("success");
+				log.info("本地文件传输到前台完毕");
 			} catch (Exception e) {
 				e.printStackTrace();
 			} finally {
@@ -243,8 +228,24 @@ public class JschServiceImpl {
 				}
 			}
 		}
-
-		return null;
 	}
 
+	//下载文件到本地，并传输给前台
+	public void downloadFileToExplorer( String downloadFile, HttpServletResponse response) {
+		
+		//获取要下载的文件名
+        String fileName = downloadFile.trim();
+        fileName = 	fileName.substring(fileName.lastIndexOf("/")+1);
+        		
+		//拼接临时存放的文件路径名
+		String localStoredFile = localFilePath + fileName;
+		
+		//下载远程的文件到本地
+		this.downloadToLocalFile(localStoredFile, downloadFile);
+				
+
+		//把本地文件传回前台
+		this.transferLocalFileToExplorer(response, localStoredFile, fileName);
+	}
+	
 }
