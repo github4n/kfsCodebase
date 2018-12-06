@@ -1,0 +1,10 @@
+#tomcat端口
+server:
+  port: 10001
+
+#jsch配置
+host.ip: 10.253.129.237
+host.port: 22
+host.user: root
+host.password: Test1234
+host.connect.timeout: 5000	
