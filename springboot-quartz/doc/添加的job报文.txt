@@ -1,0 +1,45 @@
+添加或修改 Job
+http://127.0.0.1:6001/jobs/save
+	
+{
+  "cronExpression": "0 0/5 * * * ?",
+  "id": 0,
+  "jobClass": "top.ywwxhz.job.ErrorJudgeMonitorJob",
+  "jobDataMap": {"system": "V8"},
+  "jobDescription": "Error Judge On V8",
+  "jobGroup": "ErrorJudgeGroup",
+  "jobName": "ErrorJudgeOnV8Job"
+}
+
+{
+  "cronExpression": "00 30 07 * * ?",
+  "id": 0,
+  "jobClass": "top.ywwxhz.job.SendDayReportJob",
+  "jobDataMap": {"system": "V8"},
+  "jobDescription": "Send Day Report of V8",
+  "jobGroup": "SendDayReportGroup",
+  "jobName": "SendDayReportOnV8Job"
+}
+
+
+{
+  "cronExpression": "0 0/1 * * * ?",
+  "id": 0,
+  "jobClass": "top.ywwxhz.job.SyncConditionMonitorJob",
+  "jobDataMap": {"system": "V8"},
+  "jobDescription": "Monitor Sync Condition of V8",
+  "jobGroup": "MonitorSyncConditionGroup",
+  "jobName": "MonitorSyncConditionofV8Job"
+}
+
+ 
+{
+  "cronExpression": "30 0/1 * * * ?",
+  "id": 0,
+  "jobClass": "top.ywwxhz.job.ErrorEliminateMonitorJob",
+  "jobDataMap": {"system": "V8"},
+  "jobDescription": "Error Eliminate On V8",
+  "jobGroup": "ErrorEliminateGroup",
+  "jobName": "ErrorEliminateOnV8Job"
+} 
+	 

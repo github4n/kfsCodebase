@@ -2,9 +2,9 @@
 spring.datasource: 
     continueOnError: true
     #双实例节点
-    #url: jdbc:oracle:thin:@(DESCRIPTION=(FAILOVER=ON)(ADDRESS_LIST=(LOAD_BALANCE=OFF)(ADDRESS=(PROTOCOL=TCP)(HOST=10.20.10.45)(PORT=10005))(ADDRESS=(PROTOCOL=TCP)(HOST=10.20.10.43)(PORT=10005)))(CONNECT_DATA=(SERVICE_NAME=pclptpdb)))
+    url: jdbc:oracle:thin:@(DESCRIPTION=(FAILOVER=ON)(ADDRESS_LIST=(LOAD_BALANCE=OFF)(ADDRESS=(PROTOCOL=TCP)(HOST=10.20.10.45)(PORT=10005))(ADDRESS=(PROTOCOL=TCP)(HOST=10.20.10.43)(PORT=10005)))(CONNECT_DATA=(SERVICE_NAME=pclptpdb)))
     #单实例节点
-    url: jdbc:oracle:thin:@(DESCRIPTION=(FAILOVER=ON)(ADDRESS_LIST=(LOAD_BALANCE=OFF)(ADDRESS=(PROTOCOL=TCP)(HOST=10.20.10.45)(PORT=10005)))(CONNECT_DATA=(SERVICE_NAME=pclptpdb)))
+    #url: jdbc:oracle:thin:@(DESCRIPTION=(FAILOVER=ON)(ADDRESS_LIST=(LOAD_BALANCE=OFF)(ADDRESS=(PROTOCOL=TCP)(HOST=10.20.10.45)(PORT=10005)))(CONNECT_DATA=(SERVICE_NAME=pclptpdb)))
     username: dmp
     password: Uiop_0987
 
@@ -23,8 +23,8 @@ myEmailSMTPHost: "10.21.14.72"
 
  
 #发送邮件时，附件存放的根目录   
-attachFileLocation: "/temp/"
- #邮件功能(以上)
+attachFileLocation: "/tmp/"
+#邮件功能(以上)
 
 
 

@@ -22,10 +22,8 @@ public class ErrorJudgeMonitorJob implements Job {
 		String system = (String) dataMap.get("system");
 
 		try {
-			log.info("errorJudge Begins...");
-			//errorMonitor.errorJudge(system);	
-			log.info("errorJudge Ends...");
-
+			errorMonitor.errorJudge(system);	
+			
 		} catch (Exception e) {
 			throw new JobExecutionException("ErrorJudgeMonitorJob 执行失败", e);
 		}

@@ -28,6 +28,6 @@ sendmailFlag: true
 #邮件功能(以上)
 
 #测试环境不进行异常检测和异常消除
-errorMonitorFlag: false
+errorMonitorFlag: true
 
 

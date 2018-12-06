@@ -108,6 +108,14 @@ public class ErrorMonitorServiceImpl implements ErrorMonitorService {
 		for (int i = 0; i < edList.size(); i++) {
 			//ErrorDefine ed = (ErrorDefine) edIt.next();
 			ErrorDefine ed = edList.get(i);
+			
+			//temp
+			if(ed.getErrReasonDetail().equals("批作业启动后没有处理任何数据") ||
+			   ed.getErrReasonDetail().equals("日间批作业在计划运行时间内异常终止")) {
+				log.info("1111111111111111111111111111 " + ed.getErrReasonDetail() +"pass");
+				continue;
+			}
+			//temp
 
 			List<ErrorTrail> etList = errorMonitorDao.selectChudanErrorRecord(system, ed.getErrReasonId(), ed.getMonitorIntervalCount());
 			log.info("etList.size()="+etList.size());
