@@ -10,7 +10,7 @@ server:
   
 #配置quartz    
 spring.quartz:
- #jdbc.initialize-schema: ALWAYS 
+ jdbc.initialize-schema: ALWAYS 
  #相关属性配置
  properties: 
       org:
