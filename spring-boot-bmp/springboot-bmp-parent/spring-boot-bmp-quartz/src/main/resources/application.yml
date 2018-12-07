@@ -10,7 +10,7 @@ server:
   
 #配置quartz    
 spring.quartz:
- jdbc.initialize-schema: ALWAYS 
+ #jdbc.initialize-schema: ALWAYS 
  #相关属性配置
  properties: 
       org:
@@ -61,4 +61,4 @@ token: "1530668590645"
 userChannel: "103"
 msgType: "2"
 userid: "18200339"
-notificationPlatformUrl: "http://10.21.8.7:8081"
+notificationPlatformUrl: "http://10.21.14.104:8081/ultraNotice/zabbix/alarm"

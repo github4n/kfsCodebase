@@ -14,13 +14,13 @@ public class Body {
 	String text;
 	
 	@Autowired
-	SMS sms;
+	SMS SMS;
 	
 	@Autowired
-	Mail mail;
+	Mail MAIL;
 	
 	@Autowired
-	Cloud cloud;
+	Cloud CLOUD;
 	
 	String opDate;
 }

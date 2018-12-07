@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.jboss.netty.util.EstimatableObjectWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -28,18 +27,17 @@ public class ErrorMonitorServiceImpl implements ErrorMonitorService {
 
 	@Autowired
 	EmailService emailService;
-	
-	
+
 	@Value("${errorMonitorFlag:true}")
 	boolean errorMonitorFlag;
-	
+
 	// 异常判定
 	public void errorJudge(String system) {
-		
+
 		if (!errorMonitorFlag) {
 			return;
 		}
-		
+
 		List<ErrorTrail> resET_has_where_clause = new ArrayList<ErrorTrail>();
 		List<ErrorTrail> resET_has_not_where_clause = new ArrayList<ErrorTrail>();
 
@@ -50,8 +48,8 @@ public class ErrorMonitorServiceImpl implements ErrorMonitorService {
 		int sizeED = resED.size();
 		for (int i = 0; i < sizeED; i++) {
 			ErrorDefine recordED = resED.get(i);
-			log.info("第"+i+"个异常规则="+recordED);
-			
+			log.info("第" + i + "个异常规则=" + recordED);
+
 			// 取异常规则对应的异常记录的集合
 			List<SelectField> resSF = errorMonitorDao.SelectField(system, recordED.getErrReasonDetail(),
 					recordED.getErrJudgeCondition());
@@ -61,8 +59,7 @@ public class ErrorMonitorServiceImpl implements ErrorMonitorService {
 			for (int j = 0; j < sizeSF; j++) {
 
 				SelectField recordSF = resSF.get(j);
-				log.info("第"+i+"个异常规则的"+"第"+j+"个异常记录="+recordSF);
-				
+				log.info("第" + i + "个异常规则的" + "第" + j + "个异常记录=" + recordSF);
 
 				// 根据（机构号，批作业编号，执行条件，异常编号），到ERROR_TRAIL表中查相应记录
 				List<ErrorTrail> resET = errorMonitorDao.FindInErrorTrail(system, recordSF.getProvBranchCode(),
@@ -70,7 +67,7 @@ public class ErrorMonitorServiceImpl implements ErrorMonitorService {
 						recordSF.getStartExecTime());
 
 				int sizeET = resET.size();
-				log.info("异常记录在异常轨迹表中的记录数="+resET.size());
+				log.info("异常记录在异常轨迹表中的记录数=" + resET.size());
 
 				if (sizeET == 0) { // 异常轨迹表中没记录
 					// 将异常记录插入异常轨迹表
@@ -95,213 +92,195 @@ public class ErrorMonitorServiceImpl implements ErrorMonitorService {
 		}
 	}
 
-	//针对异常的出单批作业，发送邮件，短信告警
+	// 针对异常的出单批作业，发送邮件，短信告警
 	public void chudanBatchWarning(String system) {
 ///*				
-		//取出轨迹表中的数据
+		// 取出轨迹表中的数据
 		List<ErrorDefine> edList = errorMonitorDao.selectChudanErrorReasonId(system);
 		log.info("edList.size()= " + edList.size());
-		
 
-		//Iterator<ErrorDefine> edIt = edList.iterator();
-		//while(edIt.hasNext()) {
+		// Iterator<ErrorDefine> edIt = edList.iterator();
+		// while(edIt.hasNext()) {
 		for (int i = 0; i < edList.size(); i++) {
-			//ErrorDefine ed = (ErrorDefine) edIt.next();
+			// ErrorDefine ed = (ErrorDefine) edIt.next();
 			ErrorDefine ed = edList.get(i);
-			
-			//temp
-			if(ed.getErrReasonDetail().equals("批作业启动后没有处理任何数据") ||
-			   ed.getErrReasonDetail().equals("日间批作业在计划运行时间内异常终止")) {
-				log.info("1111111111111111111111111111 " + ed.getErrReasonDetail() +"pass");
+
+			// temp
+			if (ed.getErrReasonDetail().equals("批作业启动后没有处理任何数据")
+					|| ed.getErrReasonDetail().equals("日间批作业在计划运行时间内异常终止")) {
+				log.info("1111111111111111111111111111 " + ed.getErrReasonDetail() + "pass");
 				continue;
 			}
-			//temp
+			// temp
 
-			List<ErrorTrail> etList = errorMonitorDao.selectChudanErrorRecord(system, ed.getErrReasonId(), ed.getMonitorIntervalCount());
-			log.info("etList.size()="+etList.size());
-			
-			Iterator<ErrorTrail> etIt =etList.iterator();
-			while(etIt.hasNext()) {
+			List<ErrorTrail> etList = errorMonitorDao.selectChudanErrorRecord(system, ed.getErrReasonId(),
+					ed.getMonitorIntervalCount());
+			log.info("etList.size()=" + etList.size());
+
+			Iterator<ErrorTrail> etIt = etList.iterator();
+			while (etIt.hasNext()) {
 				ErrorTrail et = etIt.next();
-				
+
 				this.prepareAndSendChudanWarningMailThroughNP(system, et);
 			}
 		}
 //*/
-		
-/*		
-		String title = "作业管理平台告警";
-		//String text = "这是测试内容";
-		
-		//获取text内容
-		String batchId ="41021";
-		String lineBatchId = "批作业ID: " + batchId;
-		
-		String batchName ="批作业名称";
-		String lineBatchName = "批作业名称: " + batchName;
-		
-		String provName ="北京";
-		String provCode ="110000";
-		String lineProvName = "省份: " + provName + "("+ provCode +")";
-		
-		String error ="批作业计划内时间未启动";
-		String lineError = "异常: " + error;
-		
-		String interval ="2018-12-04 10:04:00 ~ 2018-12-05 00:00:00" + DateUtil.now();
-;
-		String lineInterval = "检测区间: " + interval;
-		
-		//拼接text
-		StringBuffer text_sb  = new StringBuffer();
-		String lineSeparator = "\n";
-		text_sb.append(lineBatchId).append(lineSeparator)
-		.append(lineBatchName).append(lineSeparator)
-		.append(lineProvName).append(lineSeparator)
-		.append(lineError).append(lineSeparator)
-		.append(lineInterval).append(lineSeparator);		
-		String text = text_sb.toString();
-		//log.info(text);
-			
-		//获取收件人
-		StringBuffer phone_sb = new StringBuffer();
-		StringBuffer email_sb = new StringBuffer();
-		StringBuffer copyMail_sb = new StringBuffer();
-		String separator = ",";
-		List<EmailSubscription> listEmailSubscription = emailService.SelectEmailSubscriptionOfChudan(system);
-		Iterator<EmailSubscription> iterator = listEmailSubscription.iterator();
-		while(iterator.hasNext()) {
-			EmailSubscription es = iterator.next();
-			//log.info(es.toString());
-			
-			//拼接电话号
-			phone_sb.append(es.getTel()).append(separator);
-			
-			if (es.getType().equals("TO")) {
-				//拼接收件人
-				email_sb.append(es.getEmailAddress()).append(separator);
 
-			} 
-			else if (es.getType().equals("CC")) {
-				//拼接抄送人
-				copyMail_sb.append(es.getEmailAddress()).append(separator);
-			} 
-			else {
-				//do nothing
-			}						
-		}
-		
-		//拼接电话号
-		//String phone = "13161582855,17611090268";		
-		String phone = phone_sb.deleteCharAt(phone_sb.length()-1).toString();
-
-		//拼接收件人
-		//String email = "kongfanshuo0224@163.com, 594503287@qq.com";
-		String email = email_sb.deleteCharAt(email_sb.length()-1).toString();
-		
-		//拼接抄送人
-		//String copyMail = "kongfanshuo@e-chinalife.com";
-		String copyMail = copyMail_sb.deleteCharAt(copyMail_sb.length()-1).toString();
-
-		//拼接密送人
-		String blindMail = "";
-		
-		//拼接云助理Id
-		String cloudId = ""; 
-		
-		//拼接时间区间
-		String opDate = DateUtil.now();
-		
-		emailService.sendEmailThroughNotificationPlatform(title, text, phone, email, copyMail, blindMail, cloudId, opDate);
-*/
+		/*
+		 * String title = "作业管理平台告警"; //String text = "这是测试内容";
+		 * 
+		 * //获取text内容 String batchId ="41021"; String lineBatchId = "批作业ID: " + batchId;
+		 * 
+		 * String batchName ="批作业名称"; String lineBatchName = "批作业名称: " + batchName;
+		 * 
+		 * String provName ="北京"; String provCode ="110000"; String lineProvName =
+		 * "省份: " + provName + "("+ provCode +")";
+		 * 
+		 * String error ="批作业计划内时间未启动"; String lineError = "异常: " + error;
+		 * 
+		 * String interval ="2018-12-04 10:04:00 ~ 2018-12-05 00:00:00" +
+		 * DateUtil.now(); ; String lineInterval = "检测区间: " + interval;
+		 * 
+		 * //拼接text StringBuffer text_sb = new StringBuffer(); String lineSeparator =
+		 * "\n"; text_sb.append(lineBatchId).append(lineSeparator)
+		 * .append(lineBatchName).append(lineSeparator)
+		 * .append(lineProvName).append(lineSeparator)
+		 * .append(lineError).append(lineSeparator)
+		 * .append(lineInterval).append(lineSeparator); String text =
+		 * text_sb.toString(); //log.info(text);
+		 * 
+		 * //获取收件人 StringBuffer phone_sb = new StringBuffer(); StringBuffer email_sb =
+		 * new StringBuffer(); StringBuffer copyMail_sb = new StringBuffer(); String
+		 * separator = ","; List<EmailSubscription> listEmailSubscription =
+		 * emailService.SelectEmailSubscriptionOfChudan(system);
+		 * Iterator<EmailSubscription> iterator = listEmailSubscription.iterator();
+		 * while(iterator.hasNext()) { EmailSubscription es = iterator.next();
+		 * //log.info(es.toString());
+		 * 
+		 * //拼接电话号 phone_sb.append(es.getTel()).append(separator);
+		 * 
+		 * if (es.getType().equals("TO")) { //拼接收件人
+		 * email_sb.append(es.getEmailAddress()).append(separator);
+		 * 
+		 * } else if (es.getType().equals("CC")) { //拼接抄送人
+		 * copyMail_sb.append(es.getEmailAddress()).append(separator); } else { //do
+		 * nothing } }
+		 * 
+		 * //拼接电话号 //String phone = "13161582855,17611090268"; String phone =
+		 * phone_sb.deleteCharAt(phone_sb.length()-1).toString();
+		 * 
+		 * //拼接收件人 //String email = "kongfanshuo0224@163.com, 594503287@qq.com"; String
+		 * email = email_sb.deleteCharAt(email_sb.length()-1).toString();
+		 * 
+		 * //拼接抄送人 //String copyMail = "kongfanshuo@e-chinalife.com"; String copyMail =
+		 * copyMail_sb.deleteCharAt(copyMail_sb.length()-1).toString();
+		 * 
+		 * //拼接密送人 String blindMail = "";
+		 * 
+		 * //拼接云助理Id String cloudId = "";
+		 * 
+		 * //拼接时间区间 String opDate = DateUtil.now();
+		 * 
+		 * emailService.sendEmailThroughNotificationPlatform(title, text, phone, email,
+		 * copyMail, blindMail, cloudId, opDate);
+		 */
 	}
 
 	private void prepareAndSendChudanWarningMailThroughNP(String system, ErrorTrail et) {
-		
-		//准备要发送的邮件，短信内容
+
+		// 准备要发送的邮件，短信内容
 		String title = "作业管理平台告警";
-		
-		//获取text内容
-		String batchId =et.getBatchTxNo();
+
+		// 获取text内容
+		String batchId = et.getBatchTxNo();
 		String lineBatchId = "批作业ID: " + batchId;
-		
-		String batchName =et.getBatchName();
+
+		String batchName = et.getBatchName();
 		String lineBatchName = "批作业名称: " + batchName;
-		
+
 		String provName = et.getProvBranchName();
 		String provCode = et.getProvBranchCode();
-		String lineProvName = "省份: " + provName + "("+ provCode +")";
-		
+		String lineProvName = "省份: " + provName + "(" + provCode + ")";
+
 		String error = et.getErrReasonDetail();
 		String lineError = "异常: " + error;
-		
+
 		String interval = et.getStartExecTime() + " ~ " + DateUtil.now();
 		String lineInterval = "检测区间: " + interval;
-		
-		//拼接text
-		StringBuffer text_sb  = new StringBuffer();
+
+		// 拼接text
+		StringBuffer text_sb = new StringBuffer();
 		String lineSeparator = "\n";
-		text_sb.append(lineBatchId).append(lineSeparator)
-		.append(lineBatchName).append(lineSeparator)
-		.append(lineProvName).append(lineSeparator)
-		.append(lineError).append(lineSeparator)
-		.append(lineInterval).append(lineSeparator);		
+		text_sb.append(lineBatchId).append(lineSeparator).append(lineBatchName).append(lineSeparator)
+				.append(lineProvName).append(lineSeparator).append(lineError).append(lineSeparator).append(lineInterval)
+				.append(lineSeparator);
 		String text = text_sb.toString();
-		//log.info(text);
-			
-		//获取收件人
+		// log.info(text);
+
+		// 获取收件人
 		StringBuffer phone_sb = new StringBuffer();
 		StringBuffer email_sb = new StringBuffer();
 		StringBuffer copyMail_sb = new StringBuffer();
 		String separator = ",";
 		List<EmailSubscription> listEmailSubscription = emailService.SelectEmailSubscriptionOfChudan(system);
 		Iterator<EmailSubscription> iterator = listEmailSubscription.iterator();
-		while(iterator.hasNext()) {
+		while (iterator.hasNext()) {
 			EmailSubscription es = iterator.next();
-			//log.info(es.toString());
-			
-			//拼接电话号
+			// log.info(es.toString());
+
+			// 拼接电话号
 			phone_sb.append(es.getTel()).append(separator);
-			
+
 			if (es.getType().equals("TO")) {
-				//拼接收件人
+				// 拼接收件人
 				email_sb.append(es.getEmailAddress()).append(separator);
 
-			} 
-			else if (es.getType().equals("CC")) {
-				//拼接抄送人
+			} else if (es.getType().equals("CC")) {
+				// 拼接抄送人
 				copyMail_sb.append(es.getEmailAddress()).append(separator);
-			} 
-			else {
-				//do nothing
-			}						
+			} else {
+				// do nothing
+			}
 		}
-		
-		//拼接电话号
-		//String phone = "13161582855,17611090268";		
-		String phone = phone_sb.deleteCharAt(phone_sb.length()-1).toString();
-		//拼接收件人
-		//String email = "kongfanshuo0224@163.com, 594503287@qq.com";
-		String email = email_sb.deleteCharAt(email_sb.length()-1).toString();
-		
-		//拼接抄送人
-		//String copyMail = "kongfanshuo@e-chinalife.com";
-		String copyMail = copyMail_sb.deleteCharAt(copyMail_sb.length()-1).toString();
 
-		//拼接密送人
+		// 拼接电话号
+		// String phone = "13161582855,17611090268";
+		if (phone_sb.length() > 0) {
+			phone_sb = phone_sb.deleteCharAt(phone_sb.length() - 1);
+		}
+		String phone = phone_sb.toString();
+		log.info("phone = " + phone);
+		
+		// 拼接收件人
+		// String email = "kongfanshuo0224@163.com, 594503287@qq.com";
+		if (email_sb.length() > 0) {
+			email_sb = email_sb.deleteCharAt(email_sb.length() - 1);
+		}
+		String email = email_sb.toString();
+		log.info("email = " + email);
+
+		// 拼接抄送人
+		// String copyMail = "kongfanshuo@e-chinalife.com";
+		if (copyMail_sb.length() > 0) {
+			copyMail_sb = copyMail_sb.deleteCharAt(copyMail_sb.length() - 1);
+		}
+		String copyMail = copyMail_sb.toString();
+		log.info("copyMail = " + copyMail);
+
+		
+		// 拼接密送人
 		String blindMail = "";
-		
-		//拼接云助理Id
-		String cloudId = ""; 
-		
-		//拼接时间区间
+
+		// 拼接云助理Id
+		String cloudId = "";
+
+		// 拼接时间区间
 		String opDate = DateUtil.now();
-		
-		//通过通知中心发送邮件
-		emailService.sendEmailThroughNotificationPlatform(title, text, phone, email, copyMail, blindMail, cloudId, opDate);
+
+		// 通过通知中心发送邮件
+		emailService.sendEmailThroughNotificationPlatform(title, text, phone, email, copyMail, blindMail, cloudId,
+				opDate);
 	}
-	
-	
-	
 
 	// 异常消除
 	public void errorEliminate(String system) {
@@ -309,7 +288,7 @@ public class ErrorMonitorServiceImpl implements ErrorMonitorService {
 		if (!errorMonitorFlag) {
 			return;
 		}
-		
+
 		List<ErrorTrail> resET_has_where_clause = new ArrayList<ErrorTrail>();
 		List<ErrorTrail> resET_has_not_where_clause = new ArrayList<ErrorTrail>();
 
@@ -318,20 +297,19 @@ public class ErrorMonitorServiceImpl implements ErrorMonitorService {
 
 		// 遍历异常记录
 		int sizeET = resET.size();
-		log.info("errorEliminate异常记录数="+sizeET);
+		log.info("errorEliminate异常记录数=" + sizeET);
 
 		for (int i = 0; i < sizeET; i++) {
 			ErrorTrail recordET = resET.get(i);
-			log.info("errorEliminate第"+i+"个异常记录="+recordET);
-
+			log.info("errorEliminate第" + i + "个异常记录=" + recordET);
 
 			// 根据（机构号，批作业ID，执行条件，异常原因ID），where 条件=异常消除条件，到monitor_queue表中查找是否有记录
 			int countInMQ = errorMonitorDao.FindInMonitorQueue(system, recordET.getProvBranchCode(),
 					recordET.getBatchTxNo(), recordET.getWhereClause(), recordET.getErrEliminateCondition(),
-					recordET.getErrReasonId(), recordET.getStartExecTime(),recordET.getErrReasonDetail());
+					recordET.getErrReasonId(), recordET.getStartExecTime(), recordET.getErrReasonDetail());
 
-			log.info("errorEliminate第"+i+"个异常记录在monitor_queue中满足消除条件的记录数="+countInMQ);
-	
+			log.info("errorEliminate第" + i + "个异常记录在monitor_queue中满足消除条件的记录数=" + countInMQ);
+
 			if (countInMQ == 0) { // MONITOR_QUEUE中该条记录没有符合异常消除条件
 				// do nothing
 				continue;

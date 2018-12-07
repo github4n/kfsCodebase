@@ -192,11 +192,11 @@ public class EmailServiceImpl implements EmailService {
 				String cloudId, String opDate) {
 			notificationPlatform.getBody().setTitle(title);
 			notificationPlatform.getBody().setText(text);
-			notificationPlatform.getBody().getSms().setPhone(phone);
-			notificationPlatform.getBody().getMail().setEmail(email);
-			notificationPlatform.getBody().getMail().setCopyMail(copyMail);
-			notificationPlatform.getBody().getMail().setBlindMail(blindMail);
-			notificationPlatform.getBody().getCloud().setCloudId(cloudId);
+			notificationPlatform.getBody().getSMS().setPhone(phone);
+			notificationPlatform.getBody().getMAIL().setEmail(email);
+			notificationPlatform.getBody().getMAIL().setCopyMail(copyMail);
+			notificationPlatform.getBody().getMAIL().setBlindMail(blindMail);
+			notificationPlatform.getBody().getCLOUD().setCloudId(cloudId);
 			notificationPlatform.getBody().setOpDate(opDate);
 		}
 		

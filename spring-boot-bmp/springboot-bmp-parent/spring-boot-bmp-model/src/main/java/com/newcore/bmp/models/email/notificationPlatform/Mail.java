@@ -10,7 +10,7 @@ import lombok.Data;
 public class Mail {
 	String email;
 	
-	String copyMail;
 	
+	String copyMail;
 	String blindMail;
 }
