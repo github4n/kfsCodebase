@@ -124,66 +124,7 @@ public class ErrorMonitorServiceImpl implements ErrorMonitorService {
 				this.prepareAndSendChudanWarningMailThroughNP(system, et);
 			}
 		}
-//*/
 
-		/*
-		 * String title = "作业管理平台告警"; //String text = "这是测试内容";
-		 * 
-		 * //获取text内容 String batchId ="41021"; String lineBatchId = "批作业ID: " + batchId;
-		 * 
-		 * String batchName ="批作业名称"; String lineBatchName = "批作业名称: " + batchName;
-		 * 
-		 * String provName ="北京"; String provCode ="110000"; String lineProvName =
-		 * "省份: " + provName + "("+ provCode +")";
-		 * 
-		 * String error ="批作业计划内时间未启动"; String lineError = "异常: " + error;
-		 * 
-		 * String interval ="2018-12-04 10:04:00 ~ 2018-12-05 00:00:00" +
-		 * DateUtil.now(); ; String lineInterval = "检测区间: " + interval;
-		 * 
-		 * //拼接text StringBuffer text_sb = new StringBuffer(); String lineSeparator =
-		 * "\n"; text_sb.append(lineBatchId).append(lineSeparator)
-		 * .append(lineBatchName).append(lineSeparator)
-		 * .append(lineProvName).append(lineSeparator)
-		 * .append(lineError).append(lineSeparator)
-		 * .append(lineInterval).append(lineSeparator); String text =
-		 * text_sb.toString(); //log.info(text);
-		 * 
-		 * //获取收件人 StringBuffer phone_sb = new StringBuffer(); StringBuffer email_sb =
-		 * new StringBuffer(); StringBuffer copyMail_sb = new StringBuffer(); String
-		 * separator = ","; List<EmailSubscription> listEmailSubscription =
-		 * emailService.SelectEmailSubscriptionOfChudan(system);
-		 * Iterator<EmailSubscription> iterator = listEmailSubscription.iterator();
-		 * while(iterator.hasNext()) { EmailSubscription es = iterator.next();
-		 * //log.info(es.toString());
-		 * 
-		 * //拼接电话号 phone_sb.append(es.getTel()).append(separator);
-		 * 
-		 * if (es.getType().equals("TO")) { //拼接收件人
-		 * email_sb.append(es.getEmailAddress()).append(separator);
-		 * 
-		 * } else if (es.getType().equals("CC")) { //拼接抄送人
-		 * copyMail_sb.append(es.getEmailAddress()).append(separator); } else { //do
-		 * nothing } }
-		 * 
-		 * //拼接电话号 //String phone = "13161582855,17611090268"; String phone =
-		 * phone_sb.deleteCharAt(phone_sb.length()-1).toString();
-		 * 
-		 * //拼接收件人 //String email = "kongfanshuo0224@163.com, 594503287@qq.com"; String
-		 * email = email_sb.deleteCharAt(email_sb.length()-1).toString();
-		 * 
-		 * //拼接抄送人 //String copyMail = "kongfanshuo@e-chinalife.com"; String copyMail =
-		 * copyMail_sb.deleteCharAt(copyMail_sb.length()-1).toString();
-		 * 
-		 * //拼接密送人 String blindMail = "";
-		 * 
-		 * //拼接云助理Id String cloudId = "";
-		 * 
-		 * //拼接时间区间 String opDate = DateUtil.now();
-		 * 
-		 * emailService.sendEmailThroughNotificationPlatform(title, text, phone, email,
-		 * copyMail, blindMail, cloudId, opDate);
-		 */
 	}
 
 	private void prepareAndSendChudanWarningMailThroughNP(String system, ErrorTrail et) {
@@ -208,13 +149,27 @@ public class ErrorMonitorServiceImpl implements ErrorMonitorService {
 		String interval = et.getStartExecTime() + " ~ " + DateUtil.now();
 		String lineInterval = "检测区间: " + interval;
 
-		// 拼接text
-		StringBuffer text_sb = new StringBuffer();
-		String lineSeparator = "\n";
-		text_sb.append(lineBatchId).append(lineSeparator).append(lineBatchName).append(lineSeparator)
-				.append(lineProvName).append(lineSeparator).append(lineError).append(lineSeparator).append(lineInterval)
-				.append(lineSeparator);
-		String text = text_sb.toString();
+		// 拼接手机text
+		StringBuffer mobile_text_sb = new StringBuffer();
+		String mobileLineSeparator = "\n";
+		mobile_text_sb.append(lineBatchId).append(mobileLineSeparator).append(lineBatchName).append(mobileLineSeparator)
+				.append(lineProvName).append(mobileLineSeparator).append(lineError).append(mobileLineSeparator).append(lineInterval)
+				.append(mobileLineSeparator);
+		String text = "[作业管理平台监控告警]" + mobileLineSeparator;
+		text = text + "系统: " + system + mobileLineSeparator;
+		text = text + mobile_text_sb.toString();
+
+		//temp
+		//拼接邮件text
+		StringBuffer email_text_sb = new StringBuffer();
+		String emailLineSeparator = "<br>";
+		email_text_sb.append(lineBatchId).append(emailLineSeparator).append(lineBatchName).append(emailLineSeparator)
+				.append(lineProvName).append(emailLineSeparator).append(lineError).append(emailLineSeparator).append(lineInterval)
+				.append(emailLineSeparator);
+		//手机text
+		String emailText = email_text_sb.toString();
+		//temp
+
 		// log.info(text);
 
 		// 获取收件人
@@ -255,6 +210,7 @@ public class ErrorMonitorServiceImpl implements ErrorMonitorService {
 		// String email = "kongfanshuo0224@163.com, 594503287@qq.com";
 		if (email_sb.length() > 0) {
 			email_sb = email_sb.deleteCharAt(email_sb.length() - 1);
+
 		}
 		String email = email_sb.toString();
 		log.info("email = " + email);
@@ -278,7 +234,7 @@ public class ErrorMonitorServiceImpl implements ErrorMonitorService {
 		String opDate = DateUtil.now();
 
 		// 通过通知中心发送邮件
-		emailService.sendEmailThroughNotificationPlatform(title, text, phone, email, copyMail, blindMail, cloudId,
+		emailService.sendEmailThroughNotificationPlatform(title, text,  phone, email, copyMail, blindMail, cloudId,
 				opDate);
 	}
 

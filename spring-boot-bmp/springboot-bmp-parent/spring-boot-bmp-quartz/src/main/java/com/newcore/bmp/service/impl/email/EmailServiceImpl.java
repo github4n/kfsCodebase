@@ -170,14 +170,14 @@ public class EmailServiceImpl implements EmailService {
 		}
 		
 		//通过通知中心发送邮件
-		public void sendEmailThroughNotificationPlatform(String title, String text, String phone, String email, String copyMail, String blindMail,String cloudId, String opDate) {
+		public void sendEmailThroughNotificationPlatform(String title, String text,  String phone, String email, String copyMail, String blindMail,String cloudId, String opDate) {
 			
 			if(!sendmailFlag) {
 				return;
 			}
 			
 			//给报文的mojo赋值
-			this.setInfo(title, text, phone, email, copyMail, blindMail, cloudId, opDate);			
+			this.setInfo(title, text,  phone, email, copyMail, blindMail, cloudId, opDate);			
 			log.info(notificationPlatform.toString());			
 			String params = new Gson().toJson(notificationPlatform);
 			//log.info("params  = " + params);
