@@ -13,7 +13,7 @@ public interface EmailService {
 	
 	public List<EmailSubscription> SelectEmailSubscriptionOfAdministrator(String system);
 	
-	public void sendEmailThroughNotificationPlatform(String title, String text, String phone, String email, String copyMail, String blindMail,String cloudId, String opDate);
+	public void sendEmailThroughNotificationPlatform(String title, String mobileText, String emailText, String phone, String email, String copyMail, String blindMail,String cloudId, String opDate, String operation);
 
 	List<EmailSubscription> SelectEmailSubscriptionOfChudan(String system);
 }

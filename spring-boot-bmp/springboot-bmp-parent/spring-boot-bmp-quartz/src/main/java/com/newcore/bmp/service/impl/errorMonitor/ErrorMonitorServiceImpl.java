@@ -108,7 +108,7 @@ public class ErrorMonitorServiceImpl implements ErrorMonitorService {
 			// temp
 			if (ed.getErrReasonDetail().equals("批作业启动后没有处理任何数据")
 					|| ed.getErrReasonDetail().equals("日间批作业在计划运行时间内异常终止")) {
-				log.info("1111111111111111111111111111 " + ed.getErrReasonDetail() + "pass");
+				log.info(ed.getErrReasonDetail() + "pass");
 				continue;
 			}
 			// temp
@@ -155,22 +155,18 @@ public class ErrorMonitorServiceImpl implements ErrorMonitorService {
 		mobile_text_sb.append(lineBatchId).append(mobileLineSeparator).append(lineBatchName).append(mobileLineSeparator)
 				.append(lineProvName).append(mobileLineSeparator).append(lineError).append(mobileLineSeparator).append(lineInterval)
 				.append(mobileLineSeparator);
-		String text = "[作业管理平台监控告警]" + mobileLineSeparator;
-		text = text + "系统: " + system + mobileLineSeparator;
-		text = text + mobile_text_sb.toString();
+		String mobileText = "[作业管理平台监控告警]" + mobileLineSeparator;
+		mobileText = mobileText + "系统: " + system + mobileLineSeparator;
+		mobileText = mobileText + mobile_text_sb.toString();
 
-		//temp
 		//拼接邮件text
 		StringBuffer email_text_sb = new StringBuffer();
 		String emailLineSeparator = "<br>";
 		email_text_sb.append(lineBatchId).append(emailLineSeparator).append(lineBatchName).append(emailLineSeparator)
 				.append(lineProvName).append(emailLineSeparator).append(lineError).append(emailLineSeparator).append(lineInterval)
 				.append(emailLineSeparator);
-		//手机text
-		String emailText = email_text_sb.toString();
-		//temp
-
-		// log.info(text);
+		String emailText = "系统: " + system + emailLineSeparator;
+		emailText = emailText + email_text_sb.toString();
 
 		// 获取收件人
 		StringBuffer phone_sb = new StringBuffer();
@@ -199,7 +195,6 @@ public class ErrorMonitorServiceImpl implements ErrorMonitorService {
 		}
 
 		// 拼接电话号
-		// String phone = "13161582855,17611090268";
 		if (phone_sb.length() > 0) {
 			phone_sb = phone_sb.deleteCharAt(phone_sb.length() - 1);
 		}
@@ -207,7 +202,6 @@ public class ErrorMonitorServiceImpl implements ErrorMonitorService {
 		log.info("phone = " + phone);
 		
 		// 拼接收件人
-		// String email = "kongfanshuo0224@163.com, 594503287@qq.com";
 		if (email_sb.length() > 0) {
 			email_sb = email_sb.deleteCharAt(email_sb.length() - 1);
 
@@ -216,7 +210,6 @@ public class ErrorMonitorServiceImpl implements ErrorMonitorService {
 		log.info("email = " + email);
 
 		// 拼接抄送人
-		// String copyMail = "kongfanshuo@e-chinalife.com";
 		if (copyMail_sb.length() > 0) {
 			copyMail_sb = copyMail_sb.deleteCharAt(copyMail_sb.length() - 1);
 		}
@@ -234,8 +227,9 @@ public class ErrorMonitorServiceImpl implements ErrorMonitorService {
 		String opDate = DateUtil.now();
 
 		// 通过通知中心发送邮件
-		emailService.sendEmailThroughNotificationPlatform(title, text,  phone, email, copyMail, blindMail, cloudId,
-				opDate);
+		String operation = "MAIL";
+		emailService.sendEmailThroughNotificationPlatform(title, mobileText, emailText, phone, email, copyMail, blindMail, cloudId,
+				opDate, operation);
 	}
 
 	// 异常消除

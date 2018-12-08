@@ -610,7 +610,8 @@ public class ErrorMonitorDaoImpl implements ErrorMonitorDao {
 				+ "where bd.CHUDAN_FLAG = 1 "
 				+ "and bd.SYSTEM = ? "
 				+ "and et.ERR_REASON_ID = ? "
-				+ "and mod(ERR_JUDGE_COUNT, ?) = 0 ";
+				+ "and mod(ERR_JUDGE_COUNT, ?) = 0 "
+				+ "and et.ERR_ELIMITATE_FLAG = 0 ";
 
 				return (List<ErrorTrail>) jdbcTemplate.query(sql, DaoUtils.createRowMapper(ErrorTrail.class), system, errReasonId, monitorIntervalCount);
 	}

@@ -170,17 +170,17 @@ public class EmailServiceImpl implements EmailService {
 		}
 		
 		//通过通知中心发送邮件
-		public void sendEmailThroughNotificationPlatform(String title, String text,  String phone, String email, String copyMail, String blindMail,String cloudId, String opDate) {
+		public void sendEmailThroughNotificationPlatform(String title, String mobileText, String emailText, String phone, String email, String copyMail, String blindMail,String cloudId, String opDate, String operation) {
 			
 			if(!sendmailFlag) {
 				return;
 			}
 			
 			//给报文的mojo赋值
-			this.setInfo(title, text,  phone, email, copyMail, blindMail, cloudId, opDate);			
+			this.setInfo(title, mobileText, emailText, phone, email, copyMail, blindMail, cloudId, opDate, operation);		
+			
 			log.info(notificationPlatform.toString());			
 			String params = new Gson().toJson(notificationPlatform);
-			//log.info("params  = " + params);
 			
 			//给通知中心发报文
 			HttpService.doPost(notificationPlatformUrl, params);
@@ -188,15 +188,35 @@ public class EmailServiceImpl implements EmailService {
 		}
 
 		//给报文的mojo赋值
-		private void setInfo(String title, String text, String phone, String email, String copyMail, String blindMail,
-				String cloudId, String opDate) {
+		private void setInfo(String title, String mobileText, String emailText, String phone, String email, String copyMail, String blindMail,
+				String cloudId, String opDate, String operation) {
 			notificationPlatform.getBody().setTitle(title);
-			notificationPlatform.getBody().setText(text);
-			notificationPlatform.getBody().getSMS().setPhone(phone);
-			notificationPlatform.getBody().getMAIL().setEmail(email);
-			notificationPlatform.getBody().getMAIL().setCopyMail(copyMail);
-			notificationPlatform.getBody().getMAIL().setBlindMail(blindMail);
-			notificationPlatform.getBody().getCLOUD().setCloudId(cloudId);
+			
+			if (operation.equals("SMS")) {
+				notificationPlatform.getBody().setText(mobileText);			
+				notificationPlatform.getBody().getSMS().setPhone(phone);
+				notificationPlatform.getBody().getMAIL().setEmail(null);
+				notificationPlatform.getBody().getMAIL().setCopyMail(null);
+				notificationPlatform.getBody().getMAIL().setBlindMail(null);
+				notificationPlatform.getBody().getCLOUD().setCloudId(null);
+			} 
+			else if (operation.equals("MAIL")) {
+				notificationPlatform.getBody().setText(emailText);	
+				notificationPlatform.getBody().getSMS().setPhone(null);
+				notificationPlatform.getBody().getMAIL().setEmail(email);
+				notificationPlatform.getBody().getMAIL().setCopyMail(copyMail);
+				notificationPlatform.getBody().getMAIL().setBlindMail(blindMail);
+				notificationPlatform.getBody().getCLOUD().setCloudId(null);
+			}
+			else if (operation.equals("CLOUD")) {
+				notificationPlatform.getBody().setText(mobileText);	
+				notificationPlatform.getBody().getSMS().setPhone(null);
+				notificationPlatform.getBody().getMAIL().setEmail(null);
+				notificationPlatform.getBody().getMAIL().setCopyMail(null);
+				notificationPlatform.getBody().getMAIL().setBlindMail(null);
+				notificationPlatform.getBody().getCLOUD().setCloudId(cloudId);
+			}
+
 			notificationPlatform.getBody().setOpDate(opDate);
 		}
 		
