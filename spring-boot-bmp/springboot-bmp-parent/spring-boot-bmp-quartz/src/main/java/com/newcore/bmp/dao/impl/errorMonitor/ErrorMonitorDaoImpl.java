@@ -57,7 +57,9 @@ public class ErrorMonitorDaoImpl implements ErrorMonitorDao {
 		// 构造sql
 		String sql;
 
-		if (errorReasonDetail.equals(new String("批作业计划内时间未启动"))) {
+		if (errorReasonDetail.equals(new String("批作业当日未重新启动")) || 
+				errorReasonDetail.equals(new String("日间批作业未运行"))
+		   ) {
 
 			sql = "select " + "NULL as taskId, " + "NULL as startExecTime, " + "batch_def.batch_id as batchTxNo, "
 					+ "NULL as whereClause, " + "NULL as endExecTime, " + "NULL as execStat, " + "NULL as endProcRec, "
@@ -74,7 +76,8 @@ public class ErrorMonitorDaoImpl implements ErrorMonitorDao {
 
 			return (List<SelectField>) jdbcTemplate.query(sql, DaoUtils.createRowMapper(SelectField.class));
 
-		} else {
+		} 
+		else {
 			sql = "select " + "to_char(MONITOR_QUEUE_" + system + ".TASK_ID) as taskId, " + "to_char(MONITOR_QUEUE_"
 					+ system + ".START_EXEC_TIME,'yyyy-mm-dd hh24:mi:ss') as startExecTime, " + "to_char(MONITOR_QUEUE_"
 					+ system + ".BATCH_TX_NO) as batchTxNo, " + "MONITOR_QUEUE_" + system
@@ -253,6 +256,8 @@ public class ErrorMonitorDaoImpl implements ErrorMonitorDao {
 		// 批量执行要更新的纪录
 		String sql = "update ERROR_TRAIL set " + "ERR_RECENT_JUDGE_TIME= SYSDATE, ";
 
+		sql += "ERR_ELIMITATE_FLAG = 0, ERR_ELIMITATE_TIME = null, ";
+		
 		// sql加上对ERR_JUDGE_COUNT的限定条件
 		sql += "ERR_JUDGE_COUNT= ? ";
 
@@ -377,6 +382,7 @@ public class ErrorMonitorDaoImpl implements ErrorMonitorDao {
 		return (List<ErrorTrail>) jdbcTemplate.query(sql, DaoUtils.createRowMapper(ErrorTrail.class), parameter);
 	}
 
+	
 	// 根据(机构号，批作业ID，执行条件，异常原因ID）到MonitorQueue中查找对应记录
 	public int FindInMonitorQueue(String system, String provinceCode, String batchTxNo, String whereClause,
 			String errEliminateCondition, String errReasonId, String startExecTime, String errReasonDetail) {
@@ -386,8 +392,108 @@ public class ErrorMonitorDaoImpl implements ErrorMonitorDao {
 
 		String sql;
 
-//		if (Integer.parseInt(errReasonId) != 1 && Integer.parseInt(errReasonId) != 2) { // 不是应运行未运行的异常
-		if ( ! errReasonDetail.equals(new String("批作业计划内时间未启动"))) {
+		
+		//批作业当日未重新启动,或日间批作业未运行
+		if ( errReasonDetail.equals(new String("批作业当日未重新启动")) || 
+				errReasonDetail.equals(new String("日间批作业未运行"))	
+			) {
+
+			String today_zero_time = new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + " 00:00:00";
+			System.out.println(today_zero_time);
+			if (today_zero_time.equals(startExecTime)) {// 当天未运行的情况
+				
+				sql = "select count(*) " +
+
+				"from MONITOR_QUEUE_" + system + " ";
+
+				// sql加上对PROV_BRANCH_CODE的限定条件
+				sql += "where MONITOR_QUEUE_" + system + ".PROV_BRANCH_CODE = ? ";
+				parameter_arraylist.add(new String(provinceCode));
+
+				// sql加上对BATCH_TX_NO的限定条件
+				sql += "and to_char(MONITOR_QUEUE_" + system + ".BATCH_TX_NO) = ? ";
+				parameter_arraylist.add(new String(batchTxNo));
+
+				// 未运行批作业的情况
+				sql += "and to_char(TRUNC(MONITOR_QUEUE_" + system + ".START_EXEC_TIME),'yyyy-mm-dd hh24:mi:ss') = ? ";
+				parameter_arraylist.add(new String(startExecTime));
+				
+				if (errReasonDetail.equals(new String("日间批作业未运行"))) {
+					sql += "and MONITOR_QUEUE_" + system + ".EXEC_STAT = '1' ";
+
+				}
+				
+			} 
+			else {
+				// 不是当天未运行的情况，消除之
+				return 1;
+			}
+			
+		} 
+		else {
+			// 构造sql
+			sql = "select count(*) " +
+
+			"from MONITOR_QUEUE_" + system + " ";
+
+			// sql加上对PROV_BRANCH_CODE的限定条件
+			sql += "where MONITOR_QUEUE_" + system + ".PROV_BRANCH_CODE = ? ";
+			parameter_arraylist.add(new String(provinceCode));
+
+			// sql加上对BATCH_TX_NO的限定条件
+			sql += "and to_char(MONITOR_QUEUE_" + system + ".BATCH_TX_NO) = ? ";
+			parameter_arraylist.add(new String(batchTxNo));
+
+			// sql加上对where_clause的限定条件
+			if (whereClause == null) {
+				sql += "and MONITOR_QUEUE_" + system + ".WHERE_CLAUSE is null ";
+			} else {
+				sql += "and MONITOR_QUEUE_" + system + ".WHERE_CLAUSE = ? ";
+				parameter_arraylist.add(new String(whereClause));
+			}
+
+			if ( errReasonDetail.equals(new String("日间批作业在计划运行时间内异常终止"))) {
+				//日间批作业在计划运行时间内异常终止，暂时直接消除
+				return 1;
+				
+			}
+			else {
+				// sql加上对startExecTime的限定条件
+				if (startExecTime == null) {
+					sql += "and MONITOR_QUEUE_" + system + ".START_EXEC_TIME is null ";
+				} else {
+					sql += "and to_char(MONITOR_QUEUE_" + system + ".START_EXEC_TIME,'yyyy-mm-dd hh24:mi:ss') = ? ";
+					parameter_arraylist.add(new String(startExecTime));
+				}
+			}
+			
+			// sql加上异常消除条件
+			sql += "and " + errEliminateCondition;
+
+		}
+
+		// 传入后台数据库的参数
+		int size = parameter_arraylist.size();
+		Object[] parameter = (Object[]) parameter_arraylist.toArray(new Object[size]);
+
+		return jdbcTemplate.queryForObject(sql, parameter, Integer.class);
+	}
+	
+	
+	/*
+	// 根据(机构号，批作业ID，执行条件，异常原因ID）到MonitorQueue中查找对应记录
+	public int FindInMonitorQueue(String system, String provinceCode, String batchTxNo, String whereClause,
+			String errEliminateCondition, String errReasonId, String startExecTime, String errReasonDetail) {
+
+		// 初始化传参Arraylist
+		List<Object> parameter_arraylist = new ArrayList<Object>();
+
+		String sql;
+
+		
+		
+		//if ( ! errReasonDetail.equals(new String("批作业计划内时间未启动"))) {
+		if ( ! errReasonDetail.equals(new String("批作业当日未重新启动"))) {
 
 			// 构造sql
 			sql = "select count(*) " +
@@ -410,7 +516,6 @@ public class ErrorMonitorDaoImpl implements ErrorMonitorDao {
 				parameter_arraylist.add(new String(whereClause));
 			}
 
-//			if (Integer.parseInt(errReasonId) != 6 && Integer.parseInt(errReasonId) != 12) { // 不是日间批作业运行停止的异常
 			if ( ! errReasonDetail.equals(new String("日间批作业在计划运行时间内异常终止"))) {
 
 				// sql加上对startExecTime的限定条件
@@ -463,6 +568,7 @@ public class ErrorMonitorDaoImpl implements ErrorMonitorDao {
 
 		return jdbcTemplate.queryForObject(sql, parameter, Integer.class);
 	}
+	*/
 
 	// 根据（机构号，批作业ID，执行条件，异常原因ID），update异常轨迹表，更新“异常最新判定时间”,”异常累计判定次数”
 	public void eliminateErrorTrail(final List<ErrorTrail> resET_has_where_clause,
