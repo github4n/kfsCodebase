@@ -11,8 +11,21 @@ public class ErrorDefine {
 	String errEliminateCondition; // 异常消除条件
 	String system; // 所属系统
 	String monitorIntervalCount;
+	String onlyMailOnceFlag;
 	
 	
+	
+	
+
+
+
+	public String getOnlyMailOnceFlag() {
+		return onlyMailOnceFlag;
+	}
+
+	public void setOnlyMailOnceFlag(String onlyMailOnceFlag) {
+		this.onlyMailOnceFlag = onlyMailOnceFlag;
+	}
 
 	public String getMonitorIntervalCount() {
 		return monitorIntervalCount;

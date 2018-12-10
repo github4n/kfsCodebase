@@ -121,6 +121,18 @@ public class ErrorMonitorServiceImpl implements ErrorMonitorService {
 			while (etIt.hasNext()) {
 				ErrorTrail et = etIt.next();
 
+				//如果是只发一次的异常，并且已经发送过一次，则跳过发邮件
+				//log.info(et.toString());
+
+				if (et.getOnlyMailOnceFlag().equals("1") 
+						&& Integer.parseInt(et.getErrJudgeCount()) > 1) {
+
+					continue;
+				}
+
+
+				
+				//发邮件
 				this.prepareAndSendChudanWarningMailThroughNP(system, et);
 			}
 		}

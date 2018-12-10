@@ -572,7 +572,8 @@ public class ErrorMonitorDaoImpl implements ErrorMonitorDao {
 				+ "ERR_JUDGE_CONDITION as errJudgeCondition, "
 				+ "ERR_ELIMINATE_CONDITION as errEliminateCondition, "
 				+ "SYSTEM as system, "
-				+ "MONITOR_INTERVAL_COUNT as monitorIntervalCount "
+				+ "MONITOR_INTERVAL_COUNT as monitorIntervalCount,"
+				+ "ONLY_MAIL_ONCE_FLAG as onlyMailOnceFlag "
 				+ "from ERROR_DEFINE "
 				+ "where SYSTEM = ? "
 				+ "and ERR_SCALE = '严重' ";
@@ -597,7 +598,8 @@ public class ErrorMonitorDaoImpl implements ErrorMonitorDao {
 				+ "to_char(et.START_EXEC_TIME, 'yyyy-mm-dd hh24:mi:ss') as startExecTime, " + "et.SYSTEM as system,"
 				+ "bd.BATCH_NAME as batchName,"
 				+ "bp.PROV_BRANCH_NAME as provBranchName, "
-				+ "ed.ERR_REASON_DETAIL as errReasonDetail " +
+				+ "ed.ERR_REASON_DETAIL as errReasonDetail,"
+				+ "ed.ONLY_MAIL_ONCE_FLAG as onlyMailOnceFlag " +
 
 				"from ERROR_TRAIL et "
 				+ "join BATCH_DEF bd "

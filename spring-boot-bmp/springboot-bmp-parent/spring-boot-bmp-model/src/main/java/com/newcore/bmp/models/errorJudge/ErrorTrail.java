@@ -27,6 +27,19 @@ public class ErrorTrail {
 	String errReasonDetail; // 异常原因名称
 
 	String batchTypeDetail; // 批作业类型
+	String onlyMailOnceFlag;
+	
+	
+	
+
+
+	public String getOnlyMailOnceFlag() {
+		return onlyMailOnceFlag;
+	}
+
+	public void setOnlyMailOnceFlag(String onlyMailOnceFlag) {
+		this.onlyMailOnceFlag = onlyMailOnceFlag;
+	}
 
 	public String getBatchTypeDetail() {
 		return batchTypeDetail;
