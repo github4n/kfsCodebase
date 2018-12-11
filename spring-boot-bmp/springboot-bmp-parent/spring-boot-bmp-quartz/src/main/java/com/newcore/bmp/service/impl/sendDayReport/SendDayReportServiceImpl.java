@@ -62,7 +62,7 @@ public class SendDayReportServiceImpl implements SendDayReportService {
 
 		String systemEnglishName = sendDayReportDao.SelectSystemEnglishName(system);
 		System.out.println("systemEnglishName = " +systemEnglishName);
-		String errReasonDetail = "批作业计划内时间未启动";	
+		String errReasonDetail = "批作业当日未重新启动";	
 		
 		// 获得当前年月日
 		String today = new SimpleDateFormat("yyyy年MM月dd日").format(new Date());
