@@ -5,6 +5,7 @@ com\newcore\bmp\models\webvo\QueryServer.class
 com\newcore\bmp\models\email\Email.class
 com\newcore\bmp\models\authority\models\SessionModel.class
 com\newcore\bmp\models\webvo\DatabaseConnection.class
+com\newcore\bmp\models\webvo\MapBatch.class
 com\newcore\bmp\models\webvo\QueryBatch.class
 com\newcore\bmp\models\errorJudge\ErrorTrail.class
 com\newcore\bmp\models\webvo\TaskId.class
