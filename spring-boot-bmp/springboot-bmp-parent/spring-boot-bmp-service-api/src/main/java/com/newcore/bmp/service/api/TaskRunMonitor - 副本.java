@@ -87,7 +87,7 @@ public interface TaskRunMonitor {
 	
 	@POST
 	@Path("/runBatch")
-	public Map<String, Object> runBatch(QueryBatch qc);
+	public Map<String, Object> runBatch(QueryBatch qc) throws Exception;
 	
 	@POST
 	@Path("/runBatchThroughPlatform")
@@ -131,8 +131,4 @@ public interface TaskRunMonitor {
 	@POST
 	@Path("/getBatchTaskIds")
 	public QueryBatch getBatchTaskIds(QueryBatch qc);
-	
-	@POST
-	@Path("/getMapBatches")
-	public Map<String, Object> getMapBatches(QueryCond qc);
 }
