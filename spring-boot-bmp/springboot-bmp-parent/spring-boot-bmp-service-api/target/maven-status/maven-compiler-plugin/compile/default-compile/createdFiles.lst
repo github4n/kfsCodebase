@@ -1,0 +1,6 @@
+com\newcore\bmp\service\api\TaskRunMonitor.class
+com\newcore\bmp\service\api\authority\DepartmentService.class
+com\newcore\bmp\service\api\authority\ResourceService.class
+com\newcore\bmp\service\api\authority\RoleService.class
+com\newcore\bmp\service\api\authority\ClerkService.class
+com\newcore\bmp\service\api\authority\BranchService.class

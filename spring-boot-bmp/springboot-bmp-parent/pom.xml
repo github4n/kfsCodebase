@@ -23,7 +23,8 @@
 		<module>spring-cloud-eureca-server</module>
 		<module>spring-boot-admin</module>
 		<module>spring-boot-bmp-model</module>
-		
+		<module>spring-boot-bmp-service-api</module>
+
 	</modules>
 
 
@@ -43,12 +44,12 @@
 		<poi.version>3.14</poi.version>
 
 		<halo_version>coldnoodle.2.3.0-SNAPSHOT</halo_version>
-        <datagrid-support_version>3.0.0-SNAPSHOT</datagrid-support_version>
-        <fileload-support_version>3.0.2-SNAPSHOT</fileload-support_version>
-        <header-support_version>3.0.0-SNAPSHOT</header-support_version>
-        <cache-session_version>3.1.0-SNAPSHOT</cache-session_version>
-        <auth-anonymous_version>3.0.5-SNAPSHOT</auth-anonymous_version>
-        <auth-classic_version>3.1.0-SNAPSHOT</auth-classic_version>
+		<datagrid-support_version>3.0.0-SNAPSHOT</datagrid-support_version>
+		<fileload-support_version>3.0.2-SNAPSHOT</fileload-support_version>
+		<header-support_version>3.0.0-SNAPSHOT</header-support_version>
+		<cache-session_version>3.1.0-SNAPSHOT</cache-session_version>
+		<auth-anonymous_version>3.0.5-SNAPSHOT</auth-anonymous_version>
+		<auth-classic_version>3.1.0-SNAPSHOT</auth-classic_version>
 
 	</properties>
 
@@ -67,6 +68,21 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<!-- 引入Halo框架包 -->
+		<dependency>
+			<groupId>com.halo</groupId>
+			<artifactId>clic-suite</artifactId>
+			<version>${halo_version}</version>
+			<scope>provided</scope>
+			<type>pom</type>
+		</dependency>
+		<dependency>
+			<groupId>com.newcore.core.supports</groupId>
+			<artifactId>datagrid-support</artifactId>
+			<version>${datagrid-support_version}</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 
@@ -89,36 +105,5 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-
-<!-- 	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-			
-			
-			 <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>2.7</version>
-                <configuration>
-                    <encoding>${project.build.sourceEncoding}</encoding>
-                </configuration>
-            </plugin>
-            
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.3</version>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                    <encoding>${project.build.sourceEncoding}</encoding>
-                </configuration>
-            </plugin>
-			
-		</plugins>
-	</build> -->
 
 </project>
