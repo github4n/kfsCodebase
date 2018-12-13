@@ -27,4 +27,7 @@ attachFileLocation: "/tmp/"
 #邮件功能(以上)
 
 
+#出单批作业的告警时间
+chudanBatchWarningStartTime: "07:00:00"
+chudanBatchWarningEndTime: "22:00:00"
 
