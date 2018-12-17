@@ -14,4 +14,4 @@ git pull
 git push 
 git status
  
-pause 
+::pause 
