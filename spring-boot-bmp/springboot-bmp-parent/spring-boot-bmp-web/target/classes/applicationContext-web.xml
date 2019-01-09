@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jaxws="http://cxf.apache.org/jaxws"
+       xmlns:jaxrs-client="http://cxf.apache.org/jaxrs-client"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://cxf.apache.org/jaxws
+       http://cxf.apache.org/schemas/jaxws.xsd
+       http://cxf.apache.org/jaxrs-client
+       http://cxf.apache.org/schemas/jaxrs-client.xsd">
+
+    <description>springboot-bmp-web-app</description>
+	
+	<jaxrs-client:client id="taskRunMonitor"
+		serviceClass="com.newcore.bmp.service.api.TaskRunMonitor"
+		address="http://${ws.client.bmp.address}/${ws.protocol.rest.path}/TaskRunMonitor">
+		<jaxrs-client:providers>
+			<bean class="com.halo.core.fastjson.support.FastJsonProvider" />
+		</jaxrs-client:providers>
+	</jaxrs-client:client>
+	
+	<jaxrs-client:client id="clerkService"
+		serviceClass="com.newcore.bmp.service.api.authority.ClerkService"
+		address="http://localhost:9002/bmp/serviceapp/services/rest/clerkService">
+		<jaxrs-client:providers>
+			<bean class="com.halo.core.fastjson.support.FastJsonProvider" />
+		</jaxrs-client:providers>
+	</jaxrs-client:client>
+	
+	
+	
+	
+</beans>

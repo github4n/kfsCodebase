@@ -1,0 +1,28 @@
+package com.newcore.bmp.models.email;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import lombok.Data;
+
+@Component
+@Data 
+public class Email {
+	
+	@Value("${sendEmailAccount}")
+	String sendEmailAccount;
+
+	// 发件人密码
+	@Value("${sendEmailPassword}")
+	String sendEmailPassword;
+
+	// 发件人名称
+	@Value("${sendEmailName}")
+	String sendEmailName;
+
+	// 发件邮件服务器smtp的ip地址
+	@Value("${myEmailSMTPHost}")
+	String myEmailSMTPHost;
+	
+
+}

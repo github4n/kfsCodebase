@@ -1,0 +1,62 @@
+
+#
+# 服务调用配置
+#
+########################################################
+ws.client.bmp.address=localhost:9002/bmp/serviceapp/services
+ws.service.timeout=600000
+ws.client.timeout=600000
+# REST协议地址前缀
+ws.protocol.rest.path=rest
+########################################################
+#
+# WEB交互配置
+#
+########################################################
+web.session.timeout=43200000
+
+
+
+########################################################
+#
+#缓存的通用配置
+#
+########################################################
+# 是否启用动态缓存服务
+cache.dynamic=false
+
+#该值使用场景：
+# 1. 作为存入缓存中的Key值前缀
+cache.name=bmp
+
+# 所使用的缓存容器类型: REDIS
+cache.type=REDIS
+
+# 当容器类型为REDIS时,存在以下配置信息
+# Redis运行模式: SINGLETON(单例), CLUSTER(集群), SHAREED(分片)
+cache.redis.default.mode=SINGLETON
+# Redis服务地址集合
+# 写入格式: host1:port1;host2:port2
+cache.redis.default.addresses=localhost:6379
+# redis连接密码
+cache.redis.default.password=
+# Redis超时时长(毫秒)
+cache.redis.default.timeout=10000
+# 当运行模式为CLUSTER时, 允许重定向的最大次数
+cache.redis.default.maxRedirections=6
+# 自带的连接池的一些通用配置
+cache.redis.default.maxIdle=200
+cache.redis.default.maxActive=1024
+cache.redis.default.maxWait=1000
+cache.redis.default.testOnBorrow=true
+
+
+########################################################
+#
+## 开启web认证授权的测试模式,不再需要浏览器端提供用户认证信息
+#
+########################################################
+web.auth.test.enabled=false
+web.auth.test.user=testuser
+web.auth.test.authcode=testuser
+web.auth.test.accesstoken=testuser

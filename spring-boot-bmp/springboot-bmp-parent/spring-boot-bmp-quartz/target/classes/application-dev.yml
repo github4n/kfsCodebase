@@ -1,0 +1,33 @@
+#DATASOURCE
+spring.datasource: 
+    continueOnError: true
+    url: jdbc:oracle:thin:@(description=(address=(protocol=tcp)(host=10.253.129.65)(port=1521))(connect_data=(service_name=orcl)))
+    username: dmp
+    password: Clic1234
+ 
+ 
+#邮件功能(以下)
+#发件人邮箱
+sendEmailAccount: "kongfanshuo0224@163.com"
+
+#发件人密码
+sendEmailPassword: "kenducky39"
+
+#发件人名称
+sendEmailName: "作业管理平台(测试)"
+
+#发件邮件服务器smtp的ip地址
+myEmailSMTPHost: "smtp.163.com"
+
+ 
+#发送邮件时，附件存放的根目录   
+attachFileLocation: "D:\\"
+
+#测试环境不发邮件
+sendmailFlag: true
+#邮件功能(以上)
+
+#测试环境不进行异常检测和异常消除
+errorMonitorFlag: true
+
+

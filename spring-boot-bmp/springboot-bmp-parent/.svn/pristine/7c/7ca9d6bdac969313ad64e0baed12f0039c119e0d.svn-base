@@ -1,0 +1,11 @@
+#DATASOURCE
+spring.datasource: 
+    continueOnError: true
+    #双实例节点
+    url: jdbc:oracle:thin:@(DESCRIPTION=(FAILOVER=ON)(ADDRESS_LIST=(LOAD_BALANCE=OFF)(ADDRESS=(PROTOCOL=TCP)(HOST=10.20.10.45)(PORT=10005))(ADDRESS=(PROTOCOL=TCP)(HOST=10.20.10.43)(PORT=10005)))(CONNECT_DATA=(SERVICE_NAME=pclptpdb)))
+    #单实例节点
+    #url: jdbc:oracle:thin:@(DESCRIPTION=(FAILOVER=ON)(ADDRESS_LIST=(LOAD_BALANCE=OFF)(ADDRESS=(PROTOCOL=TCP)(HOST=10.20.10.45)(PORT=10005)))(CONNECT_DATA=(SERVICE_NAME=pclptpdb)))
+    username: dmp
+    password: Uiop_0987
+
+ 

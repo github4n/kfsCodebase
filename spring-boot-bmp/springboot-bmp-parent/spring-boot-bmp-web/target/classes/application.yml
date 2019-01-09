@@ -1,0 +1,33 @@
+spring: 
+  profiles: 
+    active: dev
+
+    
+  application:
+    name: spring-boot-web
+
+server:
+  servlet.context-path: /bmp/webapp/web
+  port: 9001
+
+ #向eureka中心注册
+eureka:
+  client:
+    serviceUrl:
+      # 向每个注册中心注册
+      defaultZone: http://localhost:8001/eureka/
+
+
+         
+#向admin暴露
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+      health:
+        show-details: ALWAYS
+        
+
+

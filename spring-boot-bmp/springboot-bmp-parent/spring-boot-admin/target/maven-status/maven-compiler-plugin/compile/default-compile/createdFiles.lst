@@ -1,0 +1,3 @@
+com\kfs\springbootadmin\SpringBootAdminApplication.class
+com\kfs\springbootadmin\SpringBootAdminApplication$SecurityPermitAllConfig.class
+com\kfs\springbootadmin\SpringBootAdminApplication$SecuritySecureConfig.class

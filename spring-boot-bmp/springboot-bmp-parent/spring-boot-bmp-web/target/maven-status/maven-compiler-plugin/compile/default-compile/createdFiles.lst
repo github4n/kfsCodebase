@@ -1,0 +1,13 @@
+com\newcore\bmp\authority\util\SessionUtils.class
+com\newcore\bmp\WebApplication.class
+com\newcore\bmp\web\clerk\RegisterController.class
+com\newcore\bmp\web\authority\LogoutController.class
+com\newcore\bmp\boot\servlet\ServletRegistration.class
+com\newcore\bmp\authority\util\DesUtils.class
+com\newcore\bmp\service\impl\authority\LoginAuthorizingRealm.class
+com\newcore\bmp\web\TaskRunMonitorController.class
+com\newcore\bmp\boot\listener\ListenerRegistration.class
+com\newcore\bmp\boot\jaxrsClient\JaxrsClient.class
+com\newcore\bmp\authority\util\DesChildUtils.class
+com\newcore\bmp\boot\filter\FilterRegistration.class
+com\newcore\bmp\web\clerk\ClerkController.class

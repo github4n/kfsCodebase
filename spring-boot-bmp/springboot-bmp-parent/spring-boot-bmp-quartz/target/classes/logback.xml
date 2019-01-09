@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+
+	<!--上下文定义为主机名 -->
+	<contextName>${HOSTNAME}</contextName>
+
+	<!--////////////////////////Property部分//////////////////////// -->
+
+	<!--日志文件存储的文件夹根路径 -->
+	<property name="LOG_HOME" value="logs/bmp/batchapp" />
+	<!--当使用异步日志时，日志队列中存储的最大日志对象个数 -->
+	<property name="maxQueueSize" value="512" />
+	<!--数据日志的字符集 -->
+	<property name="charset" value="UTF-8" />
+	<!--当使用异步日志时，日志队列到达20%容量时，是否要丢弃TRACE、DEBUG和INFO级别的event。0为不丢弃 -->
+	<property name="discardingThreshold" value="0" />
+	<!--日志的打印形式 -->
+	<property name="contentPattern"
+		value="[[[%d{yyyy-MM-dd HH:mm:ss.SSS} | %contextName | bmp-batchapp | %tcode | %level | %path | %logger{100} | %act | %msg %ex{full}]]]%n" />
+	<!--全量日志文件的时间滚动生成策略 -->
+	<property name="fullFileNamePattern"
+		value="full-%d{yyyy-MM-dd}.log.%i.gz" />
+	<property name="fullMaxHistory" value="30" />
+	<property name="fullMaxFileSize" value="50GB" />
+
+	<!--核心组件core日志文件的时间滚动生成策略 -->
+	<property name="coreFileNamePattern"
+		value="core-%d{yyyy-MM-dd}.log" />
+
+	<!--////////////////////////Converter部分//////////////////////// -->
+
+	<!--输出代码执行路径的占位符规则 -->
+	<conversionRule conversionWord="path"
+		converterClass="com.halo.core.log.converter.PathConverter" />
+	<!--输出日志动作的占位符规则 -->
+	<conversionRule conversionWord="act"
+		converterClass="com.halo.core.log.converter.ActConverter" />
+	<!--输出当前线程交易码的占位符规则 -->
+	<conversionRule conversionWord="tcode"
+		converterClass="com.halo.core.log.converter.TcodeConverter" />
+
+	<!--////////////////////////Appender部分//////////////////////// -->
+
+	<!-- 记录全量日志同步策略的Appender -->
+	<appender name="FULL_FILE_OUT_SYNC"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}/full/full.log</file>
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}/full/${fullFileNamePattern}
+			</fileNamePattern>
+			<maxHistory>${fullMaxHistory}</maxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>${fullMaxFileSize}</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder>
+			<charset>${charset}</charset>
+			<pattern>${contentPattern}</pattern>
+		</encoder>
+	</appender>
+
+	<!-- 记录全量日志异步策略的Appender -->
+	<appender name="FULL_FILE_OUT_ASYNC"
+		class="ch.qos.logback.classic.AsyncAppender">
+		<discardingThreshold>${discardingThreshold}</discardingThreshold>
+		<queueSize>${maxQueueSize}</queueSize>
+		<appender-ref ref="FULL_FILE_OUT_SYNC" />
+	</appender>
+
+	<!-- 记录核心组件日志同步策略的Appender -->
+	<appender name="CORE_FILE_OUT_SYNC"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}/core/core.log</file>
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}/core/${coreFileNamePattern}
+			</fileNamePattern>
+		</rollingPolicy>
+		<encoder>
+			<charset>${charset}</charset>
+			<pattern>${contentPattern}</pattern>
+		</encoder>
+	</appender>
+	<!-- 记录核心组件日志异步策略的Appender -->
+	<appender name="CORE_FILE_OUT_ASYNC"
+		class="ch.qos.logback.classic.AsyncAppender">
+		<discardingThreshold>${discardingThreshold}</discardingThreshold>
+		<queueSize>${maxQueueSize}</queueSize>
+		<appender-ref ref="CORE_FILE_OUT_SYNC" />
+	</appender>
+
+	<!-- 控制台日志输出。一定是同步的 -->
+	<appender name="STD_OUT"
+		class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<charset>${charset}</charset>
+			<pattern>${contentPattern}</pattern>
+		</encoder>
+	</appender>
+	
+ 
+
+
+	<!--////////////////////////全量日志//////////////////////// -->
+	<root level="INFO">
+		<appender-ref ref="STD_OUT" />
+		<appender-ref ref="FULL_FILE_OUT_ASYNC" />
+		<!-- <appender-ref ref="CORE_FILE_OUT_ASYNC" /> -->
+	</root>
+
+ <!--  job下的日志输出到core文件
+	<logger name="top.ywwxhz.job" level="INFO" additivity="true">
+		<appender-ref ref="CORE_FILE_OUT_ASYNC" />
+	</logger>
+-->
+ 	
+</configuration>

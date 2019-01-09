@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:soa="http://www.e-chinalife.com/soa/"
+	xmlns:jaxws="http://cxf.apache.org/jaxws" xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://cxf.apache.org/jaxws
+       http://cxf.apache.org/schemas/jaxws.xsd
+       http://cxf.apache.org/jaxrs
+       http://cxf.apache.org/schemas/jaxrs.xsd">
+
+	<description>springboot-bmp-service-app</description>
+
+
+
+
+	<jaxrs:server beanNames="taskRunMonitor" address="/rest/TaskRunMonitor">
+		<jaxrs:providers>
+			<bean class="com.halo.core.fastjson.support.FastJsonProvider" />
+		</jaxrs:providers>
+	</jaxrs:server>
+
+	<jaxrs:server beanNames="clerkService"
+		address="/${ws.protocol.rest.path}/clerkService">
+		<jaxrs:providers>
+			<bean class="com.halo.core.fastjson.support.FastJsonProvider" />
+		</jaxrs:providers>
+	</jaxrs:server>
+
+	<jaxrs:server beanNames="branchService"
+		address="/${ws.protocol.rest.path}/branchService">
+		<jaxrs:providers>
+			<bean class="com.halo.core.fastjson.support.FastJsonProvider" />
+		</jaxrs:providers>
+	</jaxrs:server>
+	<jaxrs:server beanNames="roleService"
+		address="/${ws.protocol.rest.path}/roleService">
+		<jaxrs:providers>
+			<bean class="com.halo.core.fastjson.support.FastJsonProvider" />
+		</jaxrs:providers>
+	</jaxrs:server>
+	<jaxrs:server beanNames="resourceService"
+		address="/${ws.protocol.rest.path}/resourceService">
+		<jaxrs:providers>
+			<bean class="com.halo.core.fastjson.support.FastJsonProvider" />
+		</jaxrs:providers>
+	</jaxrs:server>
+	<jaxrs:server beanNames="departmentService"
+		address="/${ws.protocol.rest.path}/departmentService">
+		<jaxrs:providers>
+			<bean class="com.halo.core.fastjson.support.FastJsonProvider" />
+		</jaxrs:providers>
+	</jaxrs:server>
+
+</beans>
